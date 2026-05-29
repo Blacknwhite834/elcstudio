@@ -41,7 +41,5 @@ yarn-error.log*
 next-env.d.ts
 public/video.mov
 public/video.mov
-public/video.webm
 
 public/video.mov
-public/video.webm

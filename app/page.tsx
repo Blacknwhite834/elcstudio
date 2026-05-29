@@ -254,7 +254,6 @@ export default function Home() {
           <div data-hero-phone-inner>
             <video autoPlay muted loop playsInline>
               <source src="/video.webm" type="video/webm" />
-              <source src="/video.webm" type="video/quicktime" />
             </video>
           </div>
         </div>
