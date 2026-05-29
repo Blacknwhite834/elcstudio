@@ -5,9 +5,11 @@ type MethodIconName = "search" | "grid" | "structure" | "frame" | "launch" | "pr
 
 type MethodStep = {
   icon: MethodIconName;
+  posterSrc: string;
   title: string;
   text: string;
-  videoSrc: string;
+  videoMp4Src: string;
+  videoWebmSrc: string;
 };
 
 function MethodIcon({ name }: { name: MethodIconName }) {
@@ -92,39 +94,51 @@ function MethodIcon({ name }: { name: MethodIconName }) {
 const methodSteps: MethodStep[] = [
   {
     icon: "search",
+    posterSrc: "/videos/posters/card1.webp",
     title: "Discovery",
     text: "Understanding your business and goals.",
-    videoSrc: "/card1.mp4",
+    videoMp4Src: "/videos/card1.mp4",
+    videoWebmSrc: "/videos/card1.webm",
   },
   {
     icon: "grid",
+    posterSrc: "/videos/posters/card2.webp",
     title: "Client space",
     text: "Access your private dashboard to complete onboarding and follow every step.",
-    videoSrc: "/card2.mp4",
+    videoMp4Src: "/videos/card2.mp4",
+    videoWebmSrc: "/videos/card2.webm",
   },
   {
     icon: "structure",
+    posterSrc: "/videos/posters/card3.webp",
     title: "Website structure",
     text: "A clear conversion flow, pages, sections and content hierarchy before design starts.",
-    videoSrc: "/card3.mp4",
+    videoMp4Src: "/videos/card3.mp4",
+    videoWebmSrc: "/videos/card3.webm",
   },
   {
     icon: "frame",
+    posterSrc: "/videos/posters/card4.webp",
     title: "Visual direction",
     text: "A polished interface direction that feels calm, premium and unmistakably yours.",
-    videoSrc: "/card4.mp4",
+    videoMp4Src: "/videos/card4.mp4",
+    videoWebmSrc: "/videos/card4.webm",
   },
   {
     icon: "launch",
+    posterSrc: "/videos/posters/card5.webp",
     title: "Build and launch",
     text: "Responsive development, testing, technical setup and a smooth handoff.",
-    videoSrc: "/card5.mp4",
+    videoMp4Src: "/videos/card5.mp4",
+    videoWebmSrc: "/videos/card5.webm",
   },
   {
     icon: "presence",
+    posterSrc: "/videos/posters/card6.webp",
     title: "Ongoing presence",
     text: "Consistent updates, social visuals and refinements that keep your brand visible.",
-    videoSrc: "/card6.mp4",
+    videoMp4Src: "/videos/card6.mp4",
+    videoWebmSrc: "/videos/card6.webm",
   },
 ];
 
@@ -134,7 +148,9 @@ const subscriptions = [
     category: "Website",
     price: "99€ / mois",
     description: "Designed for businesses that want clarity, visibility and consistency.",
-    videoSrc: "/cardstacked1.mp4",
+    posterSrc: "/videos/posters/cardstacked1.webp",
+    videoMp4Src: "/videos/cardstacked1.mp4",
+    videoWebmSrc: "/videos/cardstacked1.webm",
     features: [
       "Custom website",
       "Mobile responsive",
@@ -149,7 +165,9 @@ const subscriptions = [
     category: "Website",
     price: "149€ / mois",
     description: "A stronger digital foundation with more pages, iteration and conversion support.",
-    videoSrc: "/cardstacked2.mp4",
+    posterSrc: "/videos/posters/cardstacked2.webp",
+    videoMp4Src: "/videos/cardstacked2.mp4",
+    videoWebmSrc: "/videos/cardstacked2.webm",
     features: [
       "Essential included",
       "Advanced structure",
@@ -164,7 +182,9 @@ const subscriptions = [
     category: "Social",
     price: "299€ / mois",
     description: "Website care and social direction that keep your business active online.",
-    videoSrc: "/cardstacked3.mp4",
+    posterSrc: "/videos/posters/cardstacked3.webp",
+    videoMp4Src: "/videos/cardstacked3.mp4",
+    videoWebmSrc: "/videos/cardstacked3.webm",
     features: [
       "Weekly content",
       "4 posts / week",
@@ -252,8 +272,8 @@ export default function Home() {
       <section id="top" className="elc-hero" aria-labelledby="hero-title" data-hero-section>
         <div className="elc-hero-phone" aria-hidden="true" data-hero-phone>
           <div data-hero-phone-inner>
-            <video autoPlay muted loop playsInline>
-              <source src="/video.webm" type="video/webm" />
+            <video autoPlay muted loop playsInline preload="auto" data-hero-video>
+              <source src="/videos/hero.webm" type="video/webm" />
             </video>
           </div>
         </div>
@@ -286,11 +306,10 @@ export default function Home() {
             {methodSteps.map((step) => (
               <article className="elc-method-card" key={step.title} data-method-card>
                 <div className="elc-method-media" aria-hidden="true">
-                  {step.videoSrc ? (
-                    <video muted loop playsInline preload="metadata" data-method-video>
-                      <source src={step.videoSrc} type="video/mp4" />
-                    </video>
-                  ) : null}
+                  <video muted loop playsInline preload="none" poster={step.posterSrc} data-method-video>
+                    <source src={step.videoMp4Src} type="video/mp4" />
+                    <source src={step.videoWebmSrc} type="video/webm" />
+                  </video>
                 </div>
                 <div className="elc-method-copy">
                   <h3>
@@ -324,8 +343,17 @@ export default function Home() {
               data-stack-card
             >
               <div className="elc-sub-card-media">
-                <video muted loop playsInline preload="metadata" aria-hidden="true" data-stack-video>
-                  <source src={subscription.videoSrc} type="video/mp4" />
+                <video
+                  muted
+                  loop
+                  playsInline
+                  preload="none"
+                  poster={subscription.posterSrc}
+                  aria-hidden="true"
+                  data-stack-video
+                >
+                  <source src={subscription.videoMp4Src} type="video/mp4" />
+                  <source src={subscription.videoWebmSrc} type="video/webm" />
                 </video>
                 <ul
                   className="elc-sub-card-features"

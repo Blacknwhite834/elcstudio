@@ -90,7 +90,17 @@ export default function Interactions() {
     });
 
     if (!prefersReducedMotion && "IntersectionObserver" in window && motionVideos.length) {
+      const primeVideo = (video: HTMLVideoElement) => {
+        if (video.dataset.videoPrimed === "true") return;
+
+        video.dataset.videoPrimed = "true";
+        video.preload = "metadata";
+        video.load();
+      };
+
       const playVisibleVideo = (video: HTMLVideoElement) => {
+        primeVideo(video);
+
         const playPromise = video.play();
         if (playPromise) {
           playPromise.catch(() => undefined);
@@ -102,7 +112,11 @@ export default function Interactions() {
           entries.forEach((entry) => {
             const video = entry.target as HTMLVideoElement;
 
-            if (entry.isIntersecting && entry.intersectionRatio >= 0.28) {
+            if (entry.isIntersecting) {
+              primeVideo(video);
+            }
+
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
               playVisibleVideo(video);
               return;
             }
@@ -111,8 +125,8 @@ export default function Interactions() {
           });
         },
         {
-          rootMargin: "-14% -14% -14% -14%",
-          threshold: [0, 0.28, 0.5],
+          rootMargin: "35% 0px 35% 0px",
+          threshold: [0, 0.2, 0.5],
         },
       );
 
