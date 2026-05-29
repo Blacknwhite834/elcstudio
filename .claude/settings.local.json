@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/evanc/Downloads/**)",
+      "Bash(Select-Object -First 30)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001)",
+      "PowerShell(taskkill /PID 21524 /F)",
+      "Bash(curl -s http://localhost:3001)",
+      "Bash(npx next *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('gsap'\\); console.log\\(require\\('gsap/package.json'\\).version\\)\")",
+      "Bash(ffmpeg -version)",
+      "PowerShell(Get-Command ffmpeg -ErrorAction SilentlyContinue)",
+      "PowerShell(winget install Gyan.FFmpeg --accept-package-agreements --accept-source-agreements 2>&1)",
+      "Bash(node -e ' *)",
+      "PowerShell(npm list @ffmpeg/ffmpeg 2>$null)",
+      "PowerShell(npm install @ffmpeg/ffmpeg @ffmpeg/util --save-dev 2>&1)",
+      "PowerShell(npm install ffmpeg-static --save-dev 2>&1)",
+      "PowerShell(node -e \"const p = require\\('ffmpeg-static'\\); console.log\\(p\\)\")",
+      "PowerShell(Get-Item \"public\\\\video.mp4\" | Select-Object Name, @{N='Size MB';E={[math]::Round\\($_.Length/1MB,1\\)}})",
+      "Bash(node -e \"const pkg = require\\('./package.json'\\); console.log\\(JSON.stringify\\({...pkg.dependencies, ...pkg.devDependencies}, null, 2\\)\\)\")",
+      "Bash(node -e \"const l = require\\('./node_modules/lenis/dist/lenis.mjs'\\); console.log\\('ok'\\)\")",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const p=JSON.parse\\(d\\); console.log\\(p.main, p.module, p.exports\\)\")"
+    ]
+  }
+}
