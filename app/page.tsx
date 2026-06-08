@@ -287,12 +287,14 @@ export default function Home() {
         <h2 id="intro-title" className="elc-sr-only">
           About elc.studio
         </h2>
-        <p className="elc-intro-text" data-split-reveal>
-          elc.studio© builds high-converting websites, client spaces, and consistent
-          online presence for local businesses - creating clean, premium digital
-          experiences designed to help brands look professional, stay visible, and
-          turn visitors into clients.
-        </p>
+        <div className="elc-intro-content">
+          <p className="elc-intro-text" data-split-reveal>
+            elc.studio© builds high-converting websites, client spaces, and consistent
+            online presence for local businesses - creating clean, premium digital
+            experiences designed to help brands look professional, stay visible, and
+            turn visitors into clients.
+          </p>
+        </div>
       </section>
 
       <section id="method" className="elc-method" aria-labelledby="method-title" data-method-section>

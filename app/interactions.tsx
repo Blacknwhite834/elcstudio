@@ -204,11 +204,33 @@ export default function Interactions() {
         };
         window.addEventListener("mousemove", onFirstMove);
         const interactiveEls = document.querySelectorAll<Element>("a, button, input, textarea, select");
-        const addHover = () => cursor.classList.add("is-link");
+        const textEls = Array.from(
+          document.querySelectorAll<Element>(
+            "h1, h2, h3, p, li, strong, .elc-subscriptions-title span, .elc-calm-title span",
+          ),
+        ).filter(
+          (el) =>
+            !el.closest(
+              "a, button, input, textarea, select, label, [contenteditable='true']",
+            ),
+        );
+        const addHover = () => {
+          cursor.classList.remove("is-text");
+          cursor.classList.add("is-link");
+        };
         const removeHover = () => cursor.classList.remove("is-link");
+        const addTextHover = () => {
+          if (cursor.classList.contains("is-link")) return;
+          cursor.classList.add("is-text");
+        };
+        const removeTextHover = () => cursor.classList.remove("is-text");
         interactiveEls.forEach((el) => {
           el.addEventListener("mouseenter", addHover);
           el.addEventListener("mouseleave", removeHover);
+        });
+        textEls.forEach((el) => {
+          el.addEventListener("mouseenter", addTextHover);
+          el.addEventListener("mouseleave", removeTextHover);
         });
         cleanups.push(() => {
           window.removeEventListener("mousemove", onFirstMove);
@@ -216,6 +238,10 @@ export default function Interactions() {
           interactiveEls.forEach((el) => {
             el.removeEventListener("mouseenter", addHover);
             el.removeEventListener("mouseleave", removeHover);
+          });
+          textEls.forEach((el) => {
+            el.removeEventListener("mouseenter", addTextHover);
+            el.removeEventListener("mouseleave", removeTextHover);
           });
         });
       }
