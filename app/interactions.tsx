@@ -458,31 +458,138 @@ export default function Interactions() {
 
       const splitInstances: SplitText[] = [];
       const introSection = document.querySelector<HTMLElement>(".elc-intro");
-      const introText = document.querySelector<HTMLElement>("[data-split-reveal]");
+      const introText = document.querySelector<HTMLElement>("[data-intro-type]");
+      const introVisual = document.querySelector<HTMLElement>("[data-intro-visual]");
 
       if (introSection && introText) {
         const split = new SplitText(introText, {
-          type: "words",
-          wordsClass: "split-word",
+          charsClass: "intro-type-char",
+          linesClass: "intro-type-line",
+          type: "lines,chars",
         });
+        const introLines = split.lines as HTMLElement[];
+        const lineHeights = introLines.map((line) =>
+          Math.ceil(line.getBoundingClientRect().height),
+        );
 
         splitInstances.push(split);
-        gsap.set(split.words, { color: "#b6afb2" });
+        gsap.set(introText, {
+          autoAlpha: 1,
+          filter: "blur(0px)",
+          scale: 1,
+          y: 0,
+        });
+        gsap.set(introLines, { height: 0, overflow: "hidden", y: 12 });
+        gsap.set(split.chars, { autoAlpha: 0, yPercent: 8 });
+        if (introVisual) {
+          const introVisualRect = introVisual.getBoundingClientRect();
 
-        gsap.timeline({
+          gsap.set(introVisual, {
+            autoAlpha: 0,
+            clipPath: "inset(0% 0% 100% 0%)",
+            height: introVisualRect.height,
+            scale: 0.985,
+            scaleX: 0.985,
+            scaleY: 0.985,
+            transformOrigin: "50% 50%",
+            width: introVisualRect.width,
+            x: 0,
+            y: 20,
+          });
+        }
+
+        const introTyping = gsap.timeline({
           scrollTrigger: {
             anticipatePin: 1,
-            end: "+=118%",
+            end: "+=245%",
             pin: true,
-            scrub: true,
+            scrub: 0.75,
             start: "top top",
             trigger: introSection,
           },
-        }).to(split.words, {
-          color: "#050505",
-          ease: "none",
-          stagger: 0.06,
         });
+
+        introLines.forEach((line, index) => {
+          const lineChars = split.chars.filter((char) => line.contains(char));
+          const at = index * 0.42;
+
+          introTyping
+            .to(
+              line,
+              {
+                duration: 0.28,
+                ease: "power3.out",
+                height: lineHeights[index],
+                y: 0,
+              },
+              at,
+            )
+            .to(
+              lineChars,
+              {
+                autoAlpha: 1,
+                duration: 0.22,
+                ease: "power2.out",
+                stagger: 0.008,
+                yPercent: 0,
+              },
+              at + 0.025,
+            );
+        });
+
+        if (introVisual) {
+          introTyping.to(
+            introVisual,
+            {
+              autoAlpha: 1,
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: 0.58,
+              ease: "power3.out",
+              scaleX: 1,
+              scaleY: 1,
+              x: 0,
+              y: 0,
+            },
+            introLines.length * 0.42 + 0.18,
+          );
+        }
+
+        introTyping.to({}, { duration: 0.58 });
+      }
+
+      const imageExpandSection = document.querySelector<HTMLElement>("[data-image-expand-section]");
+      const imageExpandCard = document.querySelector<HTMLElement>("[data-image-expand-card]");
+
+      if (imageExpandSection && imageExpandCard) {
+        const getImagePadding = () => gsap.utils.clamp(16, 52, window.innerWidth * 0.035);
+        const getStartWidth = () => gsap.utils.clamp(220, 430, window.innerWidth * 0.32);
+
+        gsap.set(imageExpandCard, {
+          borderRadius: 8,
+          height: () => getStartWidth() * 0.5625,
+          width: getStartWidth,
+        });
+
+        gsap
+          .timeline({
+            scrollTrigger: {
+              anticipatePin: 1,
+              end: "+=155%",
+              invalidateOnRefresh: true,
+              pin: true,
+              scrub: 0.9,
+              start: "top top",
+              trigger: imageExpandSection,
+            },
+          })
+          .to(imageExpandCard, {
+            borderRadius: 28,
+            duration: 1,
+            ease: "power3.inOut",
+            height: () => window.innerHeight - getImagePadding() * 2,
+            width: () => window.innerWidth - getImagePadding() * 2,
+          })
+          .to({}, { duration: 0.18 });
       }
 
       const subscriptionsSection = document.querySelector<HTMLElement>(
