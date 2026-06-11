@@ -2019,6 +2019,7 @@ select {
     linear-gradient(135deg, #fbfbf7 0%, #e4efec 46%, #f0e6ed 100%);
   color: var(--elc-ink);
   display: grid;
+  justify-items: center;
   min-height: 100svh;
   overflow: hidden;
   padding: clamp(18px, 4vw, 48px);
@@ -2229,27 +2230,52 @@ select {
 
 @media (max-width: 767px) {
   .elc-coming-soon {
-    padding: 10px;
+    padding: 18px;
+    place-items: center;
   }
 
   .elc-business-card {
-    align-content: space-between;
-    min-height: calc(100svh - 20px);
-    padding: 18px;
+    align-content: center;
+    gap: clamp(26px, 8svh, 44px);
+    justify-items: center;
+    min-height: min(540px, calc(100svh - 36px));
+    padding: 22px 18px;
+    text-align: center;
   }
 
   .elc-card-topline {
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .elc-card-main {
+    margin-inline: auto;
+  }
+
+  .elc-card-main h1 {
+    justify-content: center;
+    width: 100%;
   }
 
   .elc-card-main h1 {
     font-size: clamp(3rem, 17vw, 4.7rem);
   }
 
+  .elc-card-main > p:not(.elc-card-kicker) {
+    margin-inline: auto;
+  }
+
+  .elc-card-cta {
+    margin-inline: auto;
+  }
+
   .elc-card-footer {
-    align-items: stretch;
+    align-items: center;
     flex-direction: column;
+    justify-content: center;
+    width: min(100%, 320px);
   }
 
   .elc-contact-pill {
