@@ -42,7 +42,9 @@ export default function RootLayout({
   return (
     <html lang="fr" className={inter.variable} suppressHydrationWarning>
       <head>
-        <link rel="preload" href="/videos/hero.webm" as="video" type="video/webm" />
+        <noscript>
+          <style>{`.elc-preloader,.elc-cursor{display:none}`}</style>
+        </noscript>
       </head>
       <body className="elc-body">
         <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem('elc-visited'))document.documentElement.classList.add('elc-returning')}catch(e){}` }} />
