@@ -54,7 +54,7 @@ export default function PricingScene() {
             defaults: { ease: "power2.inOut" },
             scrollTrigger: {
               anticipatePin: 1,
-              end: isMobile ? "+=260%" : "+=320%",
+              end: isMobile ? "+=230%" : "+=280%",
               invalidateOnRefresh: true,
               pin: true,
               scrub: 0.9,
@@ -63,10 +63,10 @@ export default function PricingScene() {
             },
           });
 
-          tl.to({}, { duration: 0.5 });
+          tl.to({}, { duration: 0.15 });
 
           for (let step = 0; step < plans.length - 1; step += 1) {
-            const at = 0.5 + step * (TRANSITION + HOLD);
+            const at = 0.15 + step * (TRANSITION + HOLD);
             const current = parts[step];
             const next = parts[step + 1];
             const enterAt = at + 0.35;

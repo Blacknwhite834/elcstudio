@@ -63,11 +63,17 @@ export default function FooterReveal() {
         </nav>
       </div>
 
-      <div className="elc-footer-brand">
-        <p aria-hidden="true" className="elc-footer-wordmark">
-          <span>elc.studio</span>
-          <span className="elc-accent">©</span>
-        </p>
+      {/* Figma wordmark artwork (node 107:189): the tittle of the "i" is the
+          rotating © badge, overlaid at its exact position in the vector. */}
+      <div className="elc-footer-brand" data-footer-item>
+        <Image
+          alt=""
+          className="elc-footer-wordmark-img"
+          height={292}
+          src="/figma/wordmark.svg"
+          unoptimized
+          width={1919}
+        />
         <svg
           aria-hidden="true"
           className="elc-footer-badge"
@@ -87,7 +93,7 @@ export default function FooterReveal() {
             </textPath>
           </text>
         </svg>
-        <p className="elc-sr-only">© 2026 elc.studio. All rights reserved.</p>
+        <p className="elc-sr-only">elc.studio© — © 2026 elc.studio. All rights reserved.</p>
       </div>
     </footer>
   );

@@ -9,10 +9,10 @@ import { processSteps } from "./data";
 const WORK_INFLATE = 128 / 52;
 const WORK_FILL_RATIO = 0.985;
 
-// Vertical stagger of the three process cards, as fractions of the viewport
-// height (from the Figma composition: cards sit at offset baselines).
-const CARD_OFFSETS = [-0.045, 0.13, -0.1];
-const CARD_OFFSETS_MOBILE = [-0.015, 0.035, -0.026];
+// Vertical stagger of the process cards, as fractions of the viewport height
+// (extends the Figma three-card composition's alternating baselines).
+const CARD_OFFSETS = [-0.045, 0.13, -0.1, 0.07, -0.06, 0.11];
+const CARD_OFFSETS_MOBILE = [-0.015, 0.035, -0.026, 0.02, -0.018, 0.03];
 
 export type ProcessProgressDetail = {
   active: boolean;
@@ -36,13 +36,11 @@ export default function DarkScene() {
       const work = root.querySelector<HTMLElement>("[data-dark-work]");
       const measureLine = root.querySelector<HTMLElement>("[data-measure-line]");
       const measureBut = root.querySelector<HTMLElement>("[data-measure-but]");
-      const process = root.querySelector<HTMLElement>("[data-process]");
-      const processTitle = root.querySelector<HTMLElement>("[data-process-title]");
       const track = root.querySelector<HTMLElement>("[data-process-track]");
       const cards = gsap.utils.toArray<HTMLElement>("[data-process-card]", root);
       const lightPanel = root.querySelector<HTMLElement>("[data-light-panel]");
 
-      if (!stage || !line || !but || !work || !process || !track || !lightPanel) return;
+      if (!stage || !line || !but || !work || !track || !lightPanel) return;
       if (!measureLine || !measureBut) return;
 
       // The hidden measure clone is never animated, so prefix-centering
@@ -79,23 +77,28 @@ export default function DarkScene() {
           gsap.set(butDots, { autoAlpha: 0, scale: 1.4, yPercent: 80 });
           gsap.set(leadWords, { autoAlpha: 0, yPercent: 70 });
           gsap.set(work, { autoAlpha: 0, yPercent: 70 });
+          const offsets = isMobile ? CARD_OFFSETS_MOBILE : CARD_OFFSETS;
           const cardOffset = (index: number) =>
-            (isMobile ? CARD_OFFSETS_MOBILE : CARD_OFFSETS)[index % 3] * window.innerHeight;
+            offsets[index % offsets.length] * window.innerHeight;
 
-          gsap.set(process, { autoAlpha: 0 });
-          gsap.set(processTitle, { autoAlpha: 0, y: 54 });
-          cards.forEach((card, index) => {
-            gsap.set(card, { autoAlpha: 0, y: () => cardOffset(index) + 72 });
-          });
-          gsap.set(track, { x: 0 });
-          gsap.set(lightPanel, { yPercent: 101 });
+          // Cards keep their staggered baselines; the whole track starts
+          // beyond the right edge and rides in as "work" finishes scaling.
+          const placeCards = () => {
+            cards.forEach((card, index) => {
+              gsap.set(card, { y: cardOffset(index) });
+            });
+          };
+
+          placeCards();
+          gsap.set(lightPanel, { y: 0, yPercent: 101 });
 
           const tl = gsap.timeline({
             defaults: { ease: "power2.out" },
             scrollTrigger: {
               anticipatePin: 1,
-              end: isMobile ? "+=430%" : "+=580%",
+              end: isMobile ? "+=500%" : "+=660%",
               invalidateOnRefresh: true,
+              onRefreshInit: placeCards,
               pin: true,
               scrub: 0.9,
               start: "top top",
@@ -179,29 +182,26 @@ export default function DarkScene() {
             )
             .to(work, { autoAlpha: 0.34, duration: 0.5, ease: "power1.inOut" }, "giant+=0.85");
 
-          // The process strip settles over the typographic backdrop.
-          tl.addLabel("process", 4.15)
-            .to(process, { autoAlpha: 1, duration: 0.3 }, "process")
-            .to(processTitle, { autoAlpha: 1, duration: 0.5, y: 0 }, "process+=0.05");
-          cards.forEach((card, index) => {
-            tl.to(
-              card,
-              { autoAlpha: 1, duration: 0.5, y: () => cardOffset(index) },
-              4.3 + index * 0.12,
-            );
-          });
-
-          const horizontalStart = 5.0;
-          const horizontalDuration = 1.9;
-          tl.addLabel("horizontal", horizontalStart).to(
+          // The horizontal journey begins while "work" is still scaling: the
+          // track rides in from beyond the right edge and keeps traveling
+          // left in one continuous scroll-mapped movement.
+          const horizontalStart = 3.65;
+          const horizontalDuration = 3.6;
+          tl.addLabel("horizontal", horizontalStart).fromTo(
             track,
-            { duration: horizontalDuration, ease: "none", x: () => -travel() },
+            { x: () => window.innerWidth },
+            {
+              duration: horizontalDuration,
+              ease: "none",
+              immediateRender: true,
+              x: () => -travel(),
+            },
             "horizontal",
           );
 
           // Light panel takeover into the pricing chapter.
-          tl.addLabel("panel", horizontalStart + horizontalDuration + 0.25)
-            .to(lightPanel, { duration: 1.1, ease: "power2.inOut", yPercent: 0 }, "panel")
+          tl.addLabel("panel", horizontalStart + horizontalDuration + 0.3)
+            .to(lightPanel, { duration: 1.4, ease: "power2.inOut", yPercent: 0 }, "panel")
             .to({}, { duration: 0.2 });
 
           tl.eventCallback("onUpdate", () => {

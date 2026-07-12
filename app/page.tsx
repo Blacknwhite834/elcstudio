@@ -1,13 +1,11 @@
 import AboutScene from "./components/scenes/about-scene";
-import AndTransitionScene from "./components/scenes/and-transition-scene";
 import ClosingScene from "./components/scenes/closing-scene";
 import ContactScene from "./components/scenes/contact-scene";
 import DarkScene from "./components/scenes/dark-scene";
 import FooterReveal from "./components/scenes/footer-reveal";
+import JourneyScene from "./components/scenes/journey-scene";
 import PricingIntroScene from "./components/scenes/pricing-intro-scene";
 import PricingScene from "./components/scenes/pricing-scene";
-import ShowcaseScene from "./components/scenes/showcase-scene";
-import WhatWeDoScene from "./components/scenes/what-we-do-scene";
 import { processSteps, socialExamples, websiteExamples } from "./components/scenes/data";
 
 export default function Home() {
@@ -47,10 +45,8 @@ export default function Home() {
       </section>
 
       <AboutScene />
-      <WhatWeDoScene />
-      <ShowcaseScene items={websiteExamples} title="Websites:" variant="websites" />
-      <AndTransitionScene />
-      <ShowcaseScene items={socialExamples} title="Social Presence:" variant="social" />
+      <JourneyScene items={websiteExamples} variant="websites" />
+      <JourneyScene items={socialExamples} variant="social" />
       <DarkScene />
       <PricingIntroScene />
       <PricingScene />

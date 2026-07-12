@@ -29,80 +29,66 @@ export default function ClosingScene() {
         return (lineWidth - visible) / 2;
       };
 
-      const mm = gsap.matchMedia();
+      gsap.set(phrases, { autoAlpha: 0, rotation: 1.6, yPercent: 65 });
+      gsap.set(chip, {
+        autoAlpha: 0,
+        rotation: -14,
+        skewY: 7,
+        transformOrigin: "12% 88%",
+        yPercent: 30,
+      });
 
-      mm.add(
-        {
-          isDesktop: "(min-width: 768px)",
-          isMobile: "(max-width: 767px)",
+      // No pin: the sentence assembles on a short scrubbed approach so the
+      // form below is already sharing the viewport when it completes.
+      const tl = gsap.timeline({
+        defaults: { ease: "power2.out" },
+        scrollTrigger: {
+          end: "center 40%",
+          invalidateOnRefresh: true,
+          scrub: 0.85,
+          start: "top 60%",
+          trigger: stage,
         },
-        (context) => {
-          const { isMobile } = context.conditions as { isMobile: boolean };
+      });
 
-          gsap.set(phrases, { autoAlpha: 0, rotation: 1.6, yPercent: 65 });
-          gsap.set(chip, {
-            autoAlpha: 0,
-            rotation: -14,
-            skewY: 7,
-            transformOrigin: "12% 88%",
-            yPercent: 30,
-          });
+      tl.to(phrases[0], { autoAlpha: 1, duration: 0.45, rotation: 0, yPercent: 0 }, 0);
 
-          const tl = gsap.timeline({
-            defaults: { ease: "power2.out" },
-            scrollTrigger: {
-              anticipatePin: 1,
-              end: isMobile ? "+=140%" : "+=180%",
-              invalidateOnRefresh: true,
-              pin: true,
-              scrub: 0.85,
-              start: "top top",
-              trigger: stage,
-            },
-          });
+      // "Soooo...." continues the sentence rather than starting a section.
+      // fromTo keeps the font-dependent offset fresh across refreshes.
+      tl.addLabel("soooo", 0.55)
+        .fromTo(
+          line,
+          { x: prefixShift(1) },
+          { duration: 0.5, ease: "power1.inOut", x: prefixShift(2) },
+          "soooo",
+        )
+        .to(
+          phrases[1],
+          { autoAlpha: 1, duration: 0.45, rotation: 0, yPercent: 0 },
+          "soooo+=0.1",
+        );
 
-          tl.to(phrases[0], { autoAlpha: 1, duration: 0.45, rotation: 0, yPercent: 0 }, 0);
-
-          // "Soooo...." continues the sentence rather than starting a section.
-          // fromTo keeps the font-dependent offset fresh across refreshes.
-          tl.addLabel("soooo", 0.7)
-            .fromTo(
-              line,
-              { x: prefixShift(1) },
-              { duration: 0.55, ease: "power1.inOut", x: prefixShift(2) },
-              "soooo",
-            )
-            .to(
-              phrases[1],
-              { autoAlpha: 1, duration: 0.45, rotation: 0, yPercent: 0 },
-              "soooo+=0.12",
-            );
-
-          // Sticker-peel arrival for the connect chip — distinct from the
-          // pricing chip's masked scale-in.
-          tl.addLabel("connect", 1.5)
-            .to(line, { duration: 0.6, ease: "power1.inOut", x: 0 }, "connect")
-            .to(
-              phrases[2],
-              { autoAlpha: 1, duration: 0.5, rotation: 0, yPercent: 0 },
-              "connect+=0.14",
-            )
-            .to(
-              chip,
-              {
-                autoAlpha: 1,
-                duration: 0.55,
-                ease: "power3.out",
-                rotation: 0,
-                skewY: 0,
-                yPercent: 0,
-              },
-              "connect+=0.35",
-            );
-
-          tl.to({}, { duration: 0.3 });
-        },
-      );
+      // Sticker-peel arrival for the connect chip — distinct from the
+      // pricing chip's masked scale-in.
+      tl.addLabel("connect", 1.2)
+        .to(line, { duration: 0.55, ease: "power1.inOut", x: 0 }, "connect")
+        .to(
+          phrases[2],
+          { autoAlpha: 1, duration: 0.5, rotation: 0, yPercent: 0 },
+          "connect+=0.12",
+        )
+        .to(
+          chip,
+          {
+            autoAlpha: 1,
+            duration: 0.55,
+            ease: "power3.out",
+            rotation: 0,
+            skewY: 0,
+            yPercent: 0,
+          },
+          "connect+=0.3",
+        );
     }, root);
 
     return () => ctx.revert();

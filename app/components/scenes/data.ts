@@ -66,9 +66,6 @@ export const websiteExamples: ShowcaseItem[] = [
   },
 ];
 
-// The "What we do" media grows into the first Websites frame, so it reuses
-// the same asset to keep the hand-off between the two scenes seamless.
-export const whatWeDoMedia = websiteExamples[0];
 
 export const socialExamples: ShowcaseItem[] = [
   {
@@ -88,9 +85,9 @@ export const socialExamples: ShowcaseItem[] = [
   },
 ];
 
-// Same continuity trick: the "And..." media becomes the first Social frame.
-export const andTransitionMedia = socialExamples[0];
 
+// The three Figma cards plus the previously approved method stages, so the
+// horizontal journey reads as a complete workflow.
 export const processSteps: ProcessStep[] = [
   {
     title: "Discovery",
@@ -107,11 +104,32 @@ export const processSteps: ProcessStep[] = [
     videoWebmSrc: "/videos/card3.webm",
   },
   {
+    title: "Visual direction",
+    text: "A polished interface direction that feels calm, premium and unmistakably yours.",
+    posterSrc: "/videos/posters/card4.webp",
+    videoMp4Src: "/videos/card4.mp4",
+    videoWebmSrc: "/videos/card4.webm",
+  },
+  {
+    title: "Build and launch",
+    text: "Responsive development, testing, technical setup and a smooth handoff.",
+    posterSrc: "/videos/posters/card5.webp",
+    videoMp4Src: "/videos/card5.mp4",
+    videoWebmSrc: "/videos/card5.webm",
+  },
+  {
     title: "Client space",
     text: "Files, feedback, updates, and progress stay organized.",
     posterSrc: "/videos/posters/card2.webp",
     videoMp4Src: "/videos/card2.mp4",
     videoWebmSrc: "/videos/card2.webm",
+  },
+  {
+    title: "Ongoing presence",
+    text: "Consistent updates, social visuals and refinements that keep your brand visible.",
+    posterSrc: "/videos/posters/card6.webp",
+    videoMp4Src: "/videos/card6.mp4",
+    videoWebmSrc: "/videos/card6.webm",
   },
 ];
 

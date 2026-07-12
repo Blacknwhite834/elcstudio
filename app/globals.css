@@ -97,9 +97,8 @@ select {
 .elc-method-indicator,
 .elc-hero-phone,
 .elc-hero-logo,
-.elc-showcase-frame,
-.elc-wwd-media,
-.elc-and-media,
+.elc-journey-media,
+.elc-journey-rail,
 .elc-takeover,
 .elc-process-track,
 .elc-pricing-title,
@@ -642,15 +641,19 @@ select {
   display: inline-block;
 }
 
-/* ---- Scene 1 — About ------------------------------------------------ */
+/* ---- Scene 1 — About (pinned scrubbed reveal) ------------------------ */
 
 .elc-about {
-  align-items: center;
   background: var(--elc-scene-bg);
+}
+
+.elc-about-stage {
+  align-items: center;
   display: flex;
+  height: 100svh;
   justify-content: center;
-  min-height: 100svh;
-  padding: clamp(96px, 18svh, 210px) clamp(18px, 5vw, 54px);
+  overflow: hidden;
+  padding: 0 clamp(18px, 5vw, 54px);
   text-align: center;
 }
 
@@ -682,23 +685,26 @@ select {
   object-fit: cover;
 }
 
-/* ---- Scene 2 — What we do ------------------------------------------- */
+/* ---- Scenes 2-5 — Journey (intro → media → showcase rail) ------------ */
 
-.elc-wwd-stage {
+.elc-journey-stage {
   align-items: center;
   background: var(--elc-scene-bg);
   display: flex;
   height: 100svh;
   justify-content: center;
   overflow: hidden;
+  position: relative;
 }
 
-.elc-wwd-line {
+.elc-journey-line {
   font-weight: 500;
   margin: 0;
+  position: relative;
+  z-index: 2;
 }
 
-.elc-wwd-row {
+.elc-journey-row {
   align-items: center;
   display: flex;
   flex-wrap: nowrap;
@@ -709,107 +715,112 @@ select {
   white-space: nowrap;
 }
 
-.elc-wwd-word {
-  display: inline-block;
+.elc-journey.is-social .elc-journey-row {
+  gap: 0.35em;
 }
 
-.elc-wwd-media,
-.elc-and-media {
+.elc-journey-row.is-measure {
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  visibility: hidden;
+}
+
+.elc-journey-word,
+.elc-journey-intro {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Stage-level text states, placed by the timeline onto the intro's final
+   geometry so the swap reads as the same composition changing state
+   (Figma 71:9 → 74:25 / 74:26). */
+.elc-journey-title,
+.elc-journey-label {
+  font-size: var(--elc-display);
+  font-weight: 500;
+  left: 0;
+  letter-spacing: -0.05em;
+  line-height: 1.21;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.elc-journey-label {
+  color: var(--elc-grey-soft);
+}
+
+.elc-journey-media {
   border-radius: var(--elc-radius-media);
   display: block;
   flex: none;
+  margin: 0;
   overflow: hidden;
   position: relative;
   width: clamp(96px, 7.4vw, 142px);
 }
 
-.elc-wwd-media img,
-.elc-and-media img {
+.elc-journey-media img {
   object-fit: cover;
 }
 
-/* ---- Scenes 3 & 5 — Websites / Social Presence showcases ------------ */
-
-.elc-showcase-stage {
-  background: var(--elc-scene-bg);
-  height: 100svh;
-  overflow: hidden;
-  position: relative;
-}
-
-.elc-showcase-title {
-  font-size: var(--elc-display);
-  font-weight: 500;
-  left: clamp(24px, 15.8vw, 304px);
-  letter-spacing: -0.05em;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-}
-
-.elc-showcase.is-social .elc-showcase-title {
-  left: clamp(24px, 8.1vw, 156px);
-}
-
-.elc-showcase-frames {
+.elc-journey-rail {
   inset: 0;
+  pointer-events: none;
   position: absolute;
   z-index: 1;
 }
 
-/* Figma centers the example media at ~53.5vw (x 556-1502 @1920), clear of
-   the pinned title — the asymmetric inset reproduces that offset. */
-.elc-showcase-frame {
+.elc-journey-rail-item {
   aspect-ratio: 946 / 533;
-  border-radius: var(--elc-radius-media);
-  inset: 0 0 0 7vw;
-  margin: auto;
-  overflow: hidden;
+  left: 50%;
+  margin: 0;
   position: absolute;
-  width: min(49.3vw, 92vw);
+  top: 50%;
 }
 
-.elc-showcase-frame:nth-child(2) {
-  width: min(43vw, 88vw);
+.elc-journey-rail-media {
+  border-radius: var(--elc-radius-media);
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
-.elc-showcase-frame:nth-child(3) {
-  width: min(44vw, 88vw);
-}
-
-.elc-showcase-frame img {
+.elc-journey-rail-media img {
   object-fit: cover;
 }
 
-.elc-showcase-labels {
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-  z-index: 2;
-}
-
-.elc-showcase-label {
+.elc-journey-rail-label {
   color: var(--elc-grey-soft);
   font-size: var(--elc-display);
   font-weight: 500;
+  left: calc(100% + clamp(24px, 4.4vw, 85px));
   letter-spacing: -0.05em;
   position: absolute;
-  right: clamp(24px, 8.7vw, 167px);
   top: 50%;
   transform: translateY(-50%);
+  white-space: nowrap;
 }
 
+/* Resting position comes from GSAP (yPercent 101) — no CSS transform here,
+   or GSAP would parse it as a pixel offset and double the translation. */
 .elc-takeover {
   border-radius: 45px 45px 0 0;
   height: 112%;
   left: 0;
   position: absolute;
   top: -12%;
-  transform: translateY(101%);
+  visibility: hidden;
   width: 100%;
   z-index: 6;
+}
+
+html.elc-js .elc-takeover {
+  visibility: visible;
 }
 
 .elc-takeover-dark {
@@ -819,41 +830,6 @@ select {
 .elc-takeover-light {
   background: var(--elc-scene-bg);
   border-radius: 50px 50px 0 0;
-}
-
-/* ---- Scene 4 — And... ------------------------------------------------ */
-
-.elc-and-stage {
-  align-items: center;
-  background: var(--elc-scene-bg);
-  display: flex;
-  height: 100svh;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.elc-and-line {
-  font-weight: 500;
-  margin: 0;
-}
-
-.elc-and-row {
-  align-items: center;
-  display: flex;
-  flex-wrap: nowrap;
-  font-size: var(--elc-display);
-  gap: 0.35em;
-  letter-spacing: -0.05em;
-  line-height: 1.21;
-  white-space: nowrap;
-}
-
-.elc-and-word {
-  display: inline-block;
-}
-
-.elc-and-dots {
-  display: inline-block;
 }
 
 /* ---- Scenes 6-8 — Dark chapter (But... / work / process) ------------ */
@@ -984,9 +960,9 @@ select {
   align-items: center;
   background: var(--elc-scene-bg);
   display: flex;
-  height: 100svh;
   justify-content: center;
-  overflow: hidden;
+  min-height: 72svh;
+  padding: clamp(48px, 10svh, 120px) 16px clamp(24px, 5svh, 60px);
   text-align: center;
 }
 
@@ -1204,9 +1180,9 @@ select {
   align-items: center;
   background: var(--elc-scene-bg);
   display: flex;
-  height: 100svh;
   justify-content: center;
-  overflow: hidden;
+  min-height: 68svh;
+  padding: clamp(48px, 12svh, 140px) 16px clamp(24px, 6svh, 70px);
 }
 
 .elc-closing-heading {
@@ -1242,7 +1218,8 @@ select {
   display: flex;
   height: 100svh;
   justify-content: center;
-  padding: 0 16px;
+  /* Bias the form upward so it shares the viewport with "Let's connect". */
+  padding: 0 16px 26svh;
 }
 
 .elc-contact-form-wrap {
@@ -1368,8 +1345,12 @@ select {
   background: #000000;
   border-radius: 50px 50px 0 0;
   color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
   overflow: hidden;
-  padding: clamp(56px, 4.7vw, 90px) clamp(20px, 3.4vw, 65px) 0;
+  /* Top padding clears the fixed nav on every tested viewport height. */
+  padding: clamp(120px, 14svh, 180px) clamp(20px, 3.4vw, 65px) 0;
   position: relative;
   z-index: 10;
 }
@@ -1379,6 +1360,7 @@ select {
   display: grid;
   gap: clamp(36px, 4vw, 70px);
   grid-template-columns: minmax(0, 1fr) auto;
+  margin-bottom: clamp(48px, 8svh, 140px);
   position: relative;
 }
 
@@ -1436,35 +1418,27 @@ select {
   color: var(--elc-accent);
 }
 
+/* Figma wordmark artwork (node 107:189) with the rotating © badge overlaid
+   as the tittle of the "i" — exact positions from the vector geometry. */
 .elc-footer-brand {
-  margin-top: clamp(44px, 5vw, 96px);
+  margin-top: auto;
   position: relative;
 }
 
-.elc-footer-wordmark {
-  align-items: flex-end;
-  display: flex;
-  font-size: clamp(4rem, 15.5vw, 19rem);
-  font-weight: 650;
-  justify-content: center;
-  letter-spacing: -0.04em;
-  line-height: 0.78;
-  margin: 0 0 -0.06em;
-  white-space: nowrap;
-}
-
-.elc-footer-wordmark .elc-accent {
-  margin-left: 0.04em;
+.elc-footer-wordmark-img {
+  display: block;
+  height: auto;
+  width: 100%;
 }
 
 .elc-footer-badge {
   animation: elc-badge-spin 16s linear infinite;
-  height: clamp(40px, 2.76vw, 53px);
+  aspect-ratio: 1;
+  left: 69.3%;
   position: absolute;
-  right: clamp(60px, 28vw, 540px);
-  top: 0;
+  top: -1%;
   transform-origin: 50% 50%;
-  width: clamp(40px, 2.76vw, 53px);
+  width: 2.76%;
 }
 
 .elc-footer-badge text {
@@ -1536,19 +1510,6 @@ select {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
-  .elc-showcase-frame {
-    width: min(44vw, 92vw);
-  }
-
-  .elc-showcase-frame:nth-child(2) {
-    width: min(39vw, 88vw);
-  }
-
-  .elc-showcase-frame:nth-child(3) {
-    width: min(40vw, 88vw);
-  }
-}
 
 @media (max-width: 767px) {
   .elc-about-text {
@@ -1556,37 +1517,30 @@ select {
     max-width: 34ch;
   }
 
-  .elc-wwd-row,
-  .elc-and-row,
+  .elc-journey-row,
   .elc-dark-line,
   .elc-closing-line,
   .elc-price-intro-ok,
   .elc-price-intro-question,
-  .elc-showcase-title,
-  .elc-showcase-label,
   .elc-process-title,
   .elc-footer-thanks {
     font-size: clamp(1.45rem, 6.6vw, 2rem);
   }
 
-  .elc-showcase-title {
-    left: 24px;
-    top: 16svh;
-    transform: none;
+  .elc-journey-title {
+    font-size: clamp(1.45rem, 6.6vw, 2rem);
   }
 
-  .elc-showcase-label {
-    bottom: 12svh;
-    right: 24px;
-    top: auto;
-    transform: none;
+  .elc-journey-label {
+    font-size: clamp(1.05rem, 4.4vw, 1.3rem);
   }
 
-  .elc-showcase-frame,
-  .elc-showcase-frame:nth-child(2),
-  .elc-showcase-frame:nth-child(3) {
-    inset: 0;
-    width: 88vw;
+  .elc-journey-rail-label {
+    font-size: clamp(1.05rem, 4.4vw, 1.3rem);
+    left: auto;
+    right: 8px;
+    top: calc(100% + 6px);
+    transform: none;
   }
 
   .elc-process-track {
@@ -1737,8 +1691,7 @@ select {
 
 /* ---- No-JS & reduced-motion linear fallback --------------------------- */
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-wwd-stage,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-and-stage,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-about-stage,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-price-intro-stage,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-closing-stage,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-contact-stage,
@@ -1749,24 +1702,11 @@ select {
   padding-top: 14svh;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-wwd-media,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-and-media {
-  aspect-ratio: 946 / 533;
-  width: min(70vw, 620px);
-}
-
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-wwd-row,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-and-row {
-  flex-wrap: wrap;
-  justify-content: center;
-  white-space: normal;
-}
-
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-takeover {
   display: none;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-showcase-stage {
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-stage {
   display: grid;
   gap: 28px;
   height: auto;
@@ -1774,13 +1714,27 @@ select {
   padding: 12svh 16px;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-showcase-title {
-  left: auto;
-  position: static;
-  transform: none;
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-row {
+  flex-wrap: wrap;
+  justify-content: center;
+  white-space: normal;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-showcase-frames {
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-row.is-measure {
+  display: none;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-media {
+  aspect-ratio: 946 / 533;
+  width: min(70vw, 620px);
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-title,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-label {
+  display: none;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-rail {
   display: grid;
   gap: 24px;
   inset: auto;
@@ -1789,16 +1743,19 @@ select {
   width: 100%;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-showcase-frame {
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-rail-item {
   left: auto;
   position: static;
   top: auto;
-  translate: none;
-  width: min(92vw, 946px);
+  width: min(92vw, 700px);
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-showcase-labels {
-  display: none;
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-rail-label {
+  left: auto;
+  position: static;
+  right: auto;
+  top: auto;
+  transform: none;
 }
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-dark-stage {
