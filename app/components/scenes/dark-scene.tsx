@@ -96,7 +96,7 @@ export default function DarkScene() {
             defaults: { ease: "power2.out" },
             scrollTrigger: {
               anticipatePin: 1,
-              end: isMobile ? "+=500%" : "+=660%",
+              end: isMobile ? "+=480%" : "+=640%",
               invalidateOnRefresh: true,
               onRefreshInit: placeCards,
               pin: true,
@@ -106,45 +106,46 @@ export default function DarkScene() {
             },
           });
 
-          // "But..." appears alone, optically centered via the prefix shift.
-          tl.to(but, { autoAlpha: 1, duration: 0.35, yPercent: 0 }, 0);
+          // "But..." appears immediately — the panel has just covered the
+          // stage, so no dead black scroll passes before the text reads.
+          tl.to(but, { autoAlpha: 1, duration: 0.3, yPercent: 0 }, 0);
           butDots.forEach((dot, index) => {
             tl.to(
               dot,
-              { autoAlpha: 1, duration: 0.2, ease: "power3.out", scale: 1, yPercent: 0 },
-              0.24 + index * 0.11,
+              { autoAlpha: 1, duration: 0.18, ease: "power3.out", scale: 1, yPercent: 0 },
+              0.18 + index * 0.1,
             );
           });
 
           // "how do we work?" joins while the line slides to true center.
           // fromTo keeps the font-dependent offset fresh across refreshes.
-          tl.addLabel("how", 1.0);
+          tl.addLabel("how", 0.7);
           tl.fromTo(
             line,
             { x: centerButX },
-            { duration: 0.7, ease: "power1.inOut", x: 0 },
+            { duration: 0.6, ease: "power1.inOut", x: 0 },
             "how",
           );
           leadWords.forEach((wordEl, index) => {
             tl.to(
               wordEl,
-              { autoAlpha: 1, duration: 0.4, yPercent: 0 },
-              1.05 + index * 0.12,
+              { autoAlpha: 1, duration: 0.35, yPercent: 0 },
+              0.75 + index * 0.1,
             );
           });
-          tl.to(work, { autoAlpha: 1, duration: 0.45, yPercent: 0 }, 1.45);
+          tl.to(work, { autoAlpha: 1, duration: 0.4, yPercent: 0 }, 1.1);
 
           // Mid-state: "work?" inflates to the 128px scale inside the line;
           // the flex-centered line reflows and recenters as it grows.
           tl.to(
             work,
-            { duration: 0.7, ease: "power2.inOut", fontSize: `${WORK_INFLATE}em` },
-            2.15,
+            { duration: 0.6, ease: "power2.inOut", fontSize: `${WORK_INFLATE}em` },
+            1.7,
           );
 
           // Full-bleed: scale the line about the center of "work?" so the
           // word swallows the viewport; measured when the playhead arrives.
-          tl.addLabel("giant", 3.1)
+          tl.addLabel("giant", 2.6)
             .set(
               line,
               {
@@ -185,7 +186,7 @@ export default function DarkScene() {
           // The horizontal journey begins while "work" is still scaling: the
           // track rides in from beyond the right edge and keeps traveling
           // left in one continuous scroll-mapped movement.
-          const horizontalStart = 3.65;
+          const horizontalStart = 3.1;
           const horizontalDuration = 3.6;
           tl.addLabel("horizontal", horizontalStart).fromTo(
             track,
@@ -202,7 +203,7 @@ export default function DarkScene() {
           // Light panel takeover into the pricing chapter.
           tl.addLabel("panel", horizontalStart + horizontalDuration + 0.3)
             .to(lightPanel, { duration: 1.4, ease: "power2.inOut", yPercent: 0 }, "panel")
-            .to({}, { duration: 0.2 });
+            .to({}, { duration: 0.15 });
 
           tl.eventCallback("onUpdate", () => {
             const time = tl.time();

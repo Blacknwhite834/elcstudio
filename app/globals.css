@@ -645,6 +645,7 @@ select {
 
 .elc-about {
   background: var(--elc-scene-bg);
+  border-radius: 50px 50px 0px 0px;
 }
 
 .elc-about-stage {
@@ -834,9 +835,15 @@ html.elc-js .elc-takeover {
 
 /* ---- Scenes 6-8 — Dark chapter (But... / work / process) ------------ */
 
+/* Pulled up a full viewport: the section slides over the social journey's
+   pinned stage behind the rising rounded panel, so "But..." starts with no
+   dead black scroll after the takeover completes. */
 .elc-dark {
   background: #000000;
   color: var(--elc-dark-text);
+  margin-top: -100svh;
+  position: relative;
+  z-index: 2;
 }
 
 .elc-dark-stage {
@@ -961,35 +968,40 @@ html.elc-js .elc-takeover {
   background: var(--elc-scene-bg);
   display: flex;
   justify-content: center;
-  min-height: 72svh;
-  padding: clamp(48px, 10svh, 120px) 16px clamp(24px, 5svh, 60px);
+  min-height: 46svh;
+  padding: clamp(40px, 8svh, 90px) 16px clamp(16px, 3svh, 40px);
   text-align: center;
 }
 
-.elc-price-intro-group {
-  display: grid;
-  gap: 0;
-  justify-items: center;
+.elc-price-intro-heading {
+  font-weight: 500;
+  margin: 0;
+}
+
+/* One connected sentence: phrase, three animated dots, accent question. */
+.elc-price-intro-line {
+  align-items: center;
+  display: inline-flex;
+  font-size: var(--elc-display);
+  gap: 0.35em;
+  letter-spacing: -0.05em;
+  line-height: 1.21;
+  white-space: nowrap;
 }
 
 .elc-price-intro-ok {
   color: var(--elc-ink);
-  font-size: var(--elc-display);
-  font-weight: 500;
-  letter-spacing: -0.05em;
-  line-height: 1.21;
-  margin: 0;
+  display: inline-block;
 }
 
-.elc-price-intro-question {
-  align-items: center;
-  display: flex;
-  font-size: var(--elc-display);
-  font-weight: 500;
-  gap: clamp(10px, 0.73vw, 14px);
-  letter-spacing: -0.05em;
-  line-height: 1.21;
-  margin: 0;
+.elc-price-intro-dots {
+  display: inline-flex;
+  gap: 0.05em;
+  margin-left: -0.28em;
+}
+
+.elc-price-intro-dots span {
+  display: inline-block;
 }
 
 .elc-price-question {
@@ -1006,6 +1018,8 @@ html.elc-js .elc-takeover {
   height: 100svh;
   justify-content: center;
   overflow: hidden;
+  /* Shell sits high in the stage so it peeks while the sentence is visible. */
+  padding-bottom: 10svh;
 }
 
 .elc-pricing-shell {
@@ -1181,8 +1195,8 @@ html.elc-js .elc-takeover {
   background: var(--elc-scene-bg);
   display: flex;
   justify-content: center;
-  min-height: 68svh;
-  padding: clamp(48px, 12svh, 140px) 16px clamp(24px, 6svh, 70px);
+  min-height: 42svh;
+  padding: clamp(40px, 8svh, 90px) 16px clamp(12px, 2svh, 28px);
 }
 
 .elc-closing-heading {
@@ -1219,7 +1233,7 @@ html.elc-js .elc-takeover {
   height: 100svh;
   justify-content: center;
   /* Bias the form upward so it shares the viewport with "Let's connect". */
-  padding: 0 16px 26svh;
+  padding: 0 16px 32svh;
 }
 
 .elc-contact-form-wrap {
@@ -1381,8 +1395,15 @@ html.elc-js .elc-takeover {
   z-index: 2;
 }
 
+/* The sticker PNG is transparent with its own baked shadow — the wrapper
+   must stay visually invisible. */
+.elc-footer-sticker {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
 .elc-footer-sticker img {
-  border-radius: 14px;
   height: auto;
   width: 100%;
 }
@@ -1520,11 +1541,26 @@ html.elc-js .elc-takeover {
   .elc-journey-row,
   .elc-dark-line,
   .elc-closing-line,
-  .elc-price-intro-ok,
-  .elc-price-intro-question,
+  .elc-price-intro-line,
   .elc-process-title,
   .elc-footer-thanks {
     font-size: clamp(1.45rem, 6.6vw, 2rem);
+  }
+
+  /* Deliberate wrap: phrases stay close, no large vertical gap. */
+  .elc-price-intro-line {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.1em;
+    white-space: normal;
+  }
+
+  .elc-pricing-stage {
+    padding-bottom: 4svh;
+  }
+
+  .elc-contact-stage {
+    padding-bottom: 20svh;
   }
 
   .elc-journey-title {
@@ -1704,6 +1740,16 @@ html.elc-js .elc-takeover {
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-takeover {
   display: none;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-dark {
+  margin-top: 0;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-price-intro-line {
+  flex-wrap: wrap;
+  justify-content: center;
+  white-space: normal;
 }
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-journey-stage {

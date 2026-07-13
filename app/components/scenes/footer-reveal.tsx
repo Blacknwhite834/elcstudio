@@ -41,7 +41,7 @@ export default function FooterReveal() {
           forward to creating with you
         </p>
         <div aria-hidden="true" className="elc-footer-sticker" data-footer-item>
-          <Image alt="" height={168} sizes="130px" src="/figma/sticker-peel.png" width={224} />
+          <Image alt="" height={336} sizes="130px" src="/figma/sticker.png" width={448} />
         </div>
         <nav aria-label="Footer" className="elc-footer-links" data-footer-item>
           <div className="elc-footer-col">

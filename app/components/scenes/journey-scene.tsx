@@ -142,7 +142,9 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
             width: 0,
             y: 0,
           });
-          gsap.set(rail, { y: 0 });
+          // The showcase composition (rail of Examples 2/3) stays invisible
+          // until the intro has transformed into title + Example 1.
+          gsap.set(rail, { autoAlpha: 0, y: 0 });
           gsap.set(title, { autoAlpha: 0, y: 0, yPercent: 45 });
           gsap.set(label, { autoAlpha: 0, y: 0, yPercent: 45 });
           if (takeover) gsap.set(takeover, { y: 0, yPercent: 101 });
@@ -243,6 +245,7 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
             tl.to(introRight, { autoAlpha: 0, duration: 0.45, yPercent: -35 }, "become+=0.05");
           }
           tl.to(label, { autoAlpha: 1, duration: 0.5, yPercent: 0 }, "become+=0.17");
+          tl.to(rail, { autoAlpha: 1, duration: 0.45, ease: "power1.inOut" }, "become+=0.35");
           if (isMobile) {
             // Once the intro text is gone, recenter the media in the viewport.
             tl.to(row, { duration: 0.5, ease: "power1.inOut", x: () => -mediaCenterOffset() }, "become+=0.1");
@@ -272,15 +275,27 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
           const settled = railStart + 2 * stepDur + stepGap;
 
           // ---- takeover: the black chapter physically covers the stage ------
+          // The dark section (pulled up 100svh by CSS) enters this pin at a
+          // fixed fraction (1 − vh/pinDistance). The panel starts just before
+          // that point and finishes with the pin, so its rounded edge always
+          // leads the incoming section and "But..." follows with no dead
+          // black scroll.
           if (takeover) {
+            const enterFraction = isMobile ? 1 - 1 / 3.2 : 1 - 1 / 4.5;
+            const total = (settled + 0.1) / enterFraction;
             tl.to(
               takeover,
-              { duration: 1.4, ease: "power2.inOut", yPercent: 0 },
-              settled + 0.3,
+              {
+                duration: total - settled - 0.04,
+                ease: "power2.inOut",
+                yPercent: 0,
+              },
+              settled - 0.02,
             );
+            tl.to({}, { duration: 0.06 }, total - 0.06);
+          } else {
+            tl.to({}, { duration: 0.1 });
           }
-
-          tl.to({}, { duration: 0.25 });
         },
       );
     }, root);
