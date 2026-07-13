@@ -101,9 +101,11 @@ select {
 .elc-journey-rail,
 .elc-takeover,
 .elc-process-track,
+.elc-pricing-shell,
 .elc-pricing-title,
 .elc-pricing-price,
 .elc-closing-line,
+.elc-contact-form-wrap,
 [data-hero-phone-inner] {
   will-change: transform, opacity;
 }
@@ -961,25 +963,40 @@ html.elc-js .elc-takeover {
   max-width: 30ch;
 }
 
-/* ---- Scene 9 — Pricing intro ---------------------------------------- */
+/* ---- Scenes 9-10 — Pricing (sentence morphs into the card) ---------- */
 
-.elc-price-intro-stage {
-  align-items: center;
-  background: var(--elc-scene-bg);
-  display: flex;
-  justify-content: center;
-  min-height: 46svh;
-  padding: clamp(40px, 8svh, 90px) 16px clamp(16px, 3svh, 40px);
-  text-align: center;
+/* Pulled up a viewport so it slides behind the dark scene's rising light
+   panel — light-on-light, zero dead scroll before the sentence. */
+.elc-pricing {
+  margin-top: -100svh;
+  position: relative;
+  z-index: 3;
 }
 
-.elc-price-intro-heading {
+.elc-pricing-stage {
+  background: var(--elc-scene-bg);
+  display: grid;
+  height: 100svh;
+  overflow: hidden;
+  place-items: center;
+  position: relative;
+}
+
+/* Sentence and card share the same centered grid cell so the shell can
+   grow out of the sentence's slot (FLIP). */
+.elc-pricing-heading,
+.elc-pricing-shell {
+  grid-area: 1 / 1;
+}
+
+.elc-pricing-heading {
   font-weight: 500;
   margin: 0;
+  text-align: center;
+  z-index: 1;
 }
 
-/* One connected sentence: phrase, three animated dots, accent question. */
-.elc-price-intro-line {
+.elc-pricing-line {
   align-items: center;
   display: inline-flex;
   font-size: var(--elc-display);
@@ -989,18 +1006,18 @@ html.elc-js .elc-takeover {
   white-space: nowrap;
 }
 
-.elc-price-intro-ok {
+.elc-price-ok {
   color: var(--elc-ink);
   display: inline-block;
 }
 
-.elc-price-intro-dots {
+.elc-price-dots {
   display: inline-flex;
   gap: 0.05em;
   margin-left: -0.28em;
 }
 
-.elc-price-intro-dots span {
+.elc-price-dots span {
   display: inline-block;
 }
 
@@ -1009,23 +1026,18 @@ html.elc-js .elc-takeover {
   display: inline-block;
 }
 
-/* ---- Scene 10 — Pricing ---------------------------------------------- */
-
-.elc-pricing-stage {
-  align-items: center;
-  background: var(--elc-scene-bg);
-  display: flex;
-  height: 100svh;
-  justify-content: center;
-  overflow: hidden;
-  /* Shell sits high in the stage so it peeks while the sentence is visible. */
-  padding-bottom: 10svh;
+/* Transparent placeholder that reserves the miniature card's footprint. */
+.elc-price-slot {
+  aspect-ratio: 1732 / 774;
+  display: inline-block;
+  height: 1em;
 }
 
 .elc-pricing-shell {
   aspect-ratio: 1732 / 774;
   position: relative;
   width: min(90.2vw, calc((100svh - 150px) * 1732 / 774));
+  z-index: 2;
 }
 
 .elc-pricing-panel {
@@ -1190,18 +1202,35 @@ html.elc-js .elc-takeover {
 
 /* ---- Scene 11 — Closing ---------------------------------------------- */
 
-.elc-closing-stage {
-  align-items: center;
+/* ---- Scenes 11-12 — Connect (closing morphs into the form) ---------- */
+
+.elc-connect {
   background: var(--elc-scene-bg);
-  display: flex;
-  justify-content: center;
-  min-height: 42svh;
-  padding: clamp(40px, 8svh, 90px) 16px clamp(12px, 2svh, 28px);
+  position: relative;
+  z-index: 1;
+}
+
+.elc-connect-stage {
+  background: var(--elc-scene-bg);
+  display: grid;
+  height: 100svh;
+  overflow: hidden;
+  place-items: center;
+  position: relative;
+}
+
+/* Closing line and form share the centered cell so the form grows out of
+   the "Let's connect" slot (FLIP). */
+.elc-closing-heading,
+.elc-contact-form-wrap {
+  grid-area: 1 / 1;
 }
 
 .elc-closing-heading {
   font-weight: 500;
   margin: 0;
+  text-align: center;
+  z-index: 1;
 }
 
 .elc-closing-line {
@@ -1218,26 +1247,17 @@ html.elc-js .elc-takeover {
   display: inline-block;
 }
 
-/* ---- Scene 12 — Contact ---------------------------------------------- */
-
-.elc-contact {
-  background: var(--elc-scene-bg);
-  position: relative;
-  z-index: 1;
-}
-
-.elc-contact-stage {
-  align-items: center;
-  background: var(--elc-scene-bg);
-  display: flex;
-  height: 100svh;
-  justify-content: center;
-  /* Bias the form upward so it shares the viewport with "Let's connect". */
-  padding: 0 16px 32svh;
+/* Transparent placeholder that reserves the miniature form's footprint. */
+.elc-form-slot {
+  aspect-ratio: 799 / 163;
+  display: inline-block;
+  height: 1em;
+  margin-left: 0.42em;
 }
 
 .elc-contact-form-wrap {
   width: min(799px, 92vw);
+  z-index: 2;
 }
 
 .elc-form {
@@ -1361,6 +1381,9 @@ html.elc-js .elc-takeover {
   color: #ffffff;
   display: flex;
   flex-direction: column;
+  /* Pulled up a viewport so the footer is itself the rising rounded panel
+     over the pinned connect stage. */
+  margin-top: -100svh;
   min-height: 100svh;
   overflow: hidden;
   /* Top padding clears the fixed nav on every tested viewport height. */
@@ -1405,6 +1428,7 @@ html.elc-js .elc-takeover {
 
 .elc-footer-sticker img {
   height: auto;
+  object-fit: contain;
   width: 100%;
 }
 
@@ -1541,26 +1565,26 @@ html.elc-js .elc-takeover {
   .elc-journey-row,
   .elc-dark-line,
   .elc-closing-line,
-  .elc-price-intro-line,
+  .elc-pricing-line,
   .elc-process-title,
   .elc-footer-thanks {
     font-size: clamp(1.45rem, 6.6vw, 2rem);
   }
 
-  /* Deliberate wrap: phrases stay close, no large vertical gap. */
-  .elc-price-intro-line {
+  /* Deliberate wrap: phrases stay close; the slot drops to its own line so
+     the miniature reads as sitting beneath the sentence. */
+  .elc-pricing-line,
+  .elc-closing-line {
     flex-wrap: wrap;
     justify-content: center;
-    row-gap: 0.1em;
+    row-gap: 0.35em;
     white-space: normal;
   }
 
-  .elc-pricing-stage {
-    padding-bottom: 4svh;
-  }
-
-  .elc-contact-stage {
-    padding-bottom: 20svh;
+  .elc-price-slot,
+  .elc-form-slot {
+    height: 1.4em;
+    margin-left: 0;
   }
 
   .elc-journey-title {
@@ -1594,12 +1618,6 @@ html.elc-js .elc-takeover {
 
   .elc-process-label p {
     font-size: 0.92rem;
-  }
-
-  .elc-closing-line {
-    flex-wrap: wrap;
-    justify-content: center;
-    white-space: normal;
   }
 
   .elc-pricing-stage {
@@ -1728,25 +1746,47 @@ html.elc-js .elc-takeover {
 /* ---- No-JS & reduced-motion linear fallback --------------------------- */
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-about-stage,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-price-intro-stage,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-closing-stage,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-contact-stage,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-connect-stage,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-stage {
+  display: block;
   height: auto;
   min-height: 0;
   padding-bottom: 14svh;
   padding-top: 14svh;
 }
 
+/* Un-stack the morph grid cells so the sentence and card/form read in
+   natural order without JS. */
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-heading,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-shell,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-closing-heading,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-contact-form-wrap {
+  grid-area: auto;
+  margin-inline: auto;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-heading,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-closing-heading {
+  margin-bottom: clamp(28px, 5svh, 60px);
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-price-slot,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-form-slot {
+  display: none;
+}
+
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-takeover {
   display: none;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-dark {
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-dark,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-connect,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-footer {
   margin-top: 0;
 }
 
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-price-intro-line {
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-line {
   flex-wrap: wrap;
   justify-content: center;
   white-space: normal;

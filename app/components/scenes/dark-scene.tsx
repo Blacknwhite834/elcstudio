@@ -200,10 +200,18 @@ export default function DarkScene() {
             "horizontal",
           );
 
-          // Light panel takeover into the pricing chapter.
-          tl.addLabel("panel", horizontalStart + horizontalDuration + 0.3)
-            .to(lightPanel, { duration: 1.4, ease: "power2.inOut", yPercent: 0 }, "panel")
-            .to({}, { duration: 0.15 });
+          // Light panel takeover into the pricing chapter. The pricing
+          // section is pulled up 100svh (CSS margin) and reaches the viewport
+          // top at the pin's enter fraction; the panel finishes covering
+          // exactly then, so the light-on-light hand-off is seamless.
+          const enterFraction = isMobile ? 1 - 1 / 4.8 : 1 - 1 / 6.4;
+          const panelStart = horizontalStart + horizontalDuration + 0.2;
+          const panelDur = 1.1;
+          const panelEnd = panelStart + panelDur;
+          const total = panelEnd / enterFraction;
+          tl.addLabel("panel", panelStart)
+            .to(lightPanel, { duration: panelDur, ease: "power2.inOut", yPercent: 0 }, "panel")
+            .to({}, { duration: total - panelEnd }, panelEnd);
 
           tl.eventCallback("onUpdate", () => {
             const time = tl.time();
