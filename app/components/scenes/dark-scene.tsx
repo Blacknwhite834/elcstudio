@@ -268,17 +268,7 @@ export default function DarkScene() {
             {processSteps.map((step) => (
               <article className="elc-process-card" data-process-card key={step.title}>
                 <div className="elc-process-media">
-                  <video
-                    data-motion-video
-                    loop
-                    muted
-                    playsInline
-                    poster={step.posterSrc}
-                    preload="none"
-                  >
-                    <source src={step.videoMp4Src} type="video/mp4" />
-                    <source src={step.videoWebmSrc} type="video/webm" />
-                  </video>
+                  <span className="elc-ph" />
                 </div>
                 <div className="elc-process-label">
                   <h3>{step.title}</h3>

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap } from "../../lib/gsap";
+import RollingText from "../rolling-text";
 import { footerOtherLinks, footerPageLinks } from "./data";
 
 export default function FooterReveal() {
@@ -48,7 +49,7 @@ export default function FooterReveal() {
             <p className="elc-footer-col-title">Pages</p>
             {footerPageLinks.map((link) => (
               <a href={link.href} key={link.label}>
-                {link.label}
+                <RollingText>{link.label}</RollingText>
               </a>
             ))}
           </div>
@@ -56,7 +57,7 @@ export default function FooterReveal() {
             <p className="elc-footer-col-title">Others</p>
             {footerOtherLinks.map((link) => (
               <a href={link.href} key={link.label}>
-                {link.label}
+                <RollingText>{link.label}</RollingText>
               </a>
             ))}
           </div>

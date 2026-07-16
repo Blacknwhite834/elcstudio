@@ -31,7 +31,7 @@ export type PricingPlan = {
 };
 
 export const aboutSentence =
-  "elc.studio© builds high-converting websites, client spaces, and consistent online presence for local businesses — creating clean, premium digital experiences designed to help brands look professional, stay visible, and turn visitors into clients.";
+  "elc.studio© builds high-converting websites, client spaces, and consistent online presence for local businesses — creating clean, premium digital experiences designed to help brands look professional, stay visible, and turn visitors into clients. The question is...";
 
 export const aboutTokens: AboutToken[] = [
   { type: "brand" },
@@ -48,19 +48,26 @@ export const aboutTokens: AboutToken[] = [
   },
 ];
 
+// The closing beat is intentionally NOT part of aboutTokens: it gets its own
+// reveal (accent clip-mask + staggered dots) and bridges into "What we do?".
+export const aboutClosing = {
+  lead: "The question is",
+  dots: 3,
+};
+
 export const websiteExamples: ShowcaseItem[] = [
   {
-    label: "Example 1",
+    label: "Showcase",
     src: "/images/68022ab71504ac81d459a6bf_thumb__ascent.webp",
     alt: "Ascent restaurant website homepage design",
   },
   {
-    label: "Example 2",
+    label: "Booking",
     src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary.webp",
     alt: "Ascent website secondary page design",
   },
   {
-    label: "Example 3",
+    label: "Client Spaces",
     src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent.webp",
     alt: "Ascent website full-width visual",
   },
@@ -69,17 +76,17 @@ export const websiteExamples: ShowcaseItem[] = [
 
 export const socialExamples: ShowcaseItem[] = [
   {
-    label: "Example 1",
+    label: "Strategy",
     src: "/images/photo-39_1-p-1080.webp",
     alt: "Editorial portrait used as social content",
   },
   {
-    label: "Example 2",
+    label: "Content",
     src: "/images/photo-34_1-p-1080.webp",
     alt: "Lifestyle photography for a social feed",
   },
   {
-    label: "Example 3",
+    label: "Publishing",
     src: "/images/photo-17-2_1-p-1080.webp",
     alt: "Brand photography for social presence",
   },
@@ -186,6 +193,79 @@ export const pricingPlans: PricingPlan[] = [
     videoMp4Src: "/videos/cardstacked3.mp4",
     videoWebmSrc: "/videos/cardstacked3.webm",
   },
+];
+
+export type CreateLetter = "y" | "o" | "u" | "r" | "s";
+
+export type CreateCard = {
+  id: "hero" | "vertical" | "frameA" | "frameB" | "detail1" | "detail2" | "detail3";
+  /** Letter of "yours." the card visually escapes from (undefined = fades in late). */
+  from?: CreateLetter;
+  /** Parallax factor during the climax drift (0 = static, 1 = full drift). */
+  depth: number;
+  src?: string;
+  posterSrc?: string;
+  videoMp4Src?: string;
+  videoWebmSrc?: string;
+  objectPosition?: string;
+};
+
+// The media revealed inside the letterforms of "yours." — each tile shows the
+// exact same asset (or poster) as the card it later escapes into, so the
+// letter→card layer swap reads as one continuous object.
+export const createLetterMedia: Record<CreateLetter, { src: string; objectPosition?: string }> = {
+  y: { src: "/images/68022ab71504ac81d459a6bf_thumb__ascent-p-800.webp", objectPosition: "50% 12%" },
+  o: {
+    src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary-p-800.webp",
+    objectPosition: "50% 18%",
+  },
+  u: { src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent-p-1600.webp", objectPosition: "50% 40%" },
+  r: { src: "/videos/posters/cardstacked3.webp", objectPosition: "50% 30%" },
+  s: { src: "/videos/posters/card4.webp", objectPosition: "50% 50%" },
+};
+
+// Editorial composition after the media escapes "yours." — one landscape hero,
+// one vertical social video, two interface frames, three small details.
+export const createCards: CreateCard[] = [
+  {
+    id: "hero",
+    from: "u",
+    depth: 0.3,
+    src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent-p-1600.webp",
+    objectPosition: "50% 40%",
+  },
+  {
+    id: "vertical",
+    from: "r",
+    depth: 0.8,
+    posterSrc: "/videos/posters/cardstacked3.webp",
+    videoMp4Src: "/videos/cardstacked3.mp4",
+    videoWebmSrc: "/videos/cardstacked3.webm",
+  },
+  {
+    id: "frameA",
+    from: "y",
+    depth: 0.55,
+    src: "/images/68022ab71504ac81d459a6bf_thumb__ascent-p-800.webp",
+    objectPosition: "50% 12%",
+  },
+  {
+    id: "frameB",
+    from: "o",
+    depth: 0.6,
+    src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary-p-800.webp",
+    objectPosition: "50% 18%",
+  },
+  {
+    id: "detail1",
+    from: "s",
+    depth: 0.9,
+    posterSrc: "/videos/posters/card4.webp",
+    videoMp4Src: "/videos/card4.mp4",
+    videoWebmSrc: "/videos/card4.webm",
+  },
+  { id: "detail2", depth: 1, src: "/images/Lightbox-Sign-Mockup-p-800.png" },
+  { id: "detail3", depth: 0.75, src: "/images/photo-34_1-p-1080.webp" },
 ];
 
 export const footerPageLinks = [

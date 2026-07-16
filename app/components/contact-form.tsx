@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { sendContactEmail, type ContactFormState } from "../actions";
 import ArrowIcon from "./arrow-icon";
+import RollingText from "./rolling-text";
 
 const initialState: ContactFormState = {
   status: "idle",
@@ -143,7 +144,7 @@ export default function ContactForm() {
 
         {isDone ? (
           <button className="elc-pill elc-form-continue" disabled type="button">
-            Sent
+            <RollingText>Sent</RollingText>
             <ArrowIcon className="elc-pill-icon" />
           </button>
         ) : (
@@ -156,7 +157,7 @@ export default function ContactForm() {
             }}
             type={isLastStep ? "submit" : "button"}
           >
-            {pending ? "Sending..." : isLastStep ? "Send" : "Continue"}
+            <RollingText>{pending ? "Sending..." : isLastStep ? "Send" : "Continue"}</RollingText>
             <ArrowIcon className="elc-pill-icon" />
           </button>
         )}

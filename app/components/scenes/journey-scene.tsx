@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { gsap } from "../../lib/gsap";
 import type { ShowcaseItem } from "./data";
 
@@ -303,7 +302,7 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
     return () => ctx.revert();
   }, [variant, isSocial]);
 
-  const srText = `${isSocial ? "And... Social Presence:" : "What we do — Websites:"} ${items
+  const srText = `${isSocial ? "And... Social Presence:" : "What we do? — Websites:"} ${items
     .map((item) => item.alt)
     .join(", ")}`;
 
@@ -333,19 +332,12 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
               )}
             </span>
             <figure className="elc-journey-media" data-journey-media>
-              <Image
-                alt=""
-                height={533}
-                sizes="(max-width: 767px) 100vw, 50vw"
-                src={items[0].src}
-                style={{ height: "100%", objectFit: "cover", width: "100%" }}
-                width={946}
-              />
+              <span className="elc-ph" />
             </figure>
             {isSocial ? null : (
               <span className="elc-journey-intro" data-intro-right>
                 <span className="elc-journey-word" data-journey-word>
-                  do
+                  do?
                 </span>
               </span>
             )}
@@ -353,7 +345,7 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
           {/* Static clones used only for measurements — never animated. */}
           <span aria-hidden="true" className="elc-journey-row is-measure">
             <span data-measure-left>{isSocial ? "And..." : "What we"}</span>
-            <span data-measure-right>{isSocial ? "" : "do"}</span>
+            <span data-measure-right>{isSocial ? "" : "do?"}</span>
           </span>
         </h2>
 
@@ -370,12 +362,7 @@ export default function JourneyScene({ variant, items }: JourneySceneProps) {
           {items.slice(1).map((item) => (
             <figure className="elc-journey-rail-item" data-rail-item key={item.label}>
               <div className="elc-journey-rail-media">
-                <Image
-                  alt=""
-                  fill
-                  sizes="(max-width: 767px) 82vw, 44vw"
-                  src={item.src}
-                />
+                <span className="elc-ph" />
               </div>
               <span className="elc-journey-rail-label">{item.label}</span>
             </figure>

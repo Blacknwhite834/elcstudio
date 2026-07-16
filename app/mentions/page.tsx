@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RollingText from "../components/rolling-text";
 
 export const metadata: Metadata = {
   title: "Mentions légales — elc.studio",
@@ -11,7 +12,7 @@ export default function MentionsPage() {
     <main className="elc-legal">
       <div className="elc-legal-inner">
         <Link className="elc-legal-back" href="/">
-          ← Back to elc.studio
+          <RollingText>← Back to elc.studio</RollingText>
         </Link>
         <h1>Mentions légales</h1>
         <h2>Publisher</h2>

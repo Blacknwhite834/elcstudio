@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "../../lib/gsap";
 import ArrowIcon from "../arrow-icon";
+import RollingText from "../rolling-text";
 import { pricingPlans } from "./data";
 
 const TRANSITION = 1.1;
@@ -214,10 +215,7 @@ export default function PricingScene() {
                 {plan.eyebrow}
               </p>
               <div className="elc-pricing-media" data-el-media>
-                <video data-motion-video loop muted playsInline poster={plan.posterSrc} preload="none">
-                  <source src={plan.videoMp4Src} type="video/mp4" />
-                  <source src={plan.videoWebmSrc} type="video/webm" />
-                </video>
+                <span className="elc-ph" />
               </div>
               <p className="elc-pricing-desc" data-el-desc>
                 {plan.description}
@@ -247,7 +245,7 @@ export default function PricingScene() {
             / Month
           </span>
           <a className="elc-pill elc-pricing-cta" href="#contact">
-            Book now
+            <RollingText>Book now</RollingText>
             <ArrowIcon className="elc-pill-icon" />
           </a>
         </div>

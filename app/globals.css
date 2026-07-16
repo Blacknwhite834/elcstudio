@@ -80,6 +80,10 @@ select {
   overflow: clip;
 }
 
+.elc-mnav {
+  display: none;
+}
+
 .elc-sr-only {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -106,6 +110,8 @@ select {
 .elc-pricing-price,
 .elc-closing-line,
 .elc-contact-form-wrap,
+.elc-create-word-inner,
+.elc-create-card,
 [data-hero-phone-inner] {
   will-change: transform, opacity;
 }
@@ -148,7 +154,7 @@ select {
   padding: 0 13px;
 }
 
-.elc-nav-brand span {
+.elc-nav-brand [data-brand-copy] {
   color: var(--elc-muted);
   font-weight: 560;
 }
@@ -512,57 +518,180 @@ select {
   }
 
   .elc-nav {
-    gap: 4px;
-    justify-content: center;
-    max-width: calc(100vw - 16px);
-    width: calc(100vw - 16px);
-  }
-
-  .elc-nav-brand,
-  .elc-nav-menu,
-  .elc-nav-contact {
-    min-height: 40px;
-  }
-
-  .elc-nav-brand {
-    font-size: 0.8rem;
-    padding: 0 11px;
-  }
-
-  .elc-nav-menu {
-    gap: 0;
-    padding: 0 12px;
-  }
-
-  .elc-nav-menu a,
-  .elc-nav-contact {
-    font-size: 0.8rem;
-  }
-
-  .elc-nav-menu a:first-child,
-  .elc-nav-menu a[href="#subscriptions"] {
     display: none;
   }
 
-  .elc-nav.is-card-nav .elc-nav-menu {
-    gap: 0;
-    min-width: clamp(112px, 34vw, 148px);
-    padding: 0 12px;
+  .elc-mnav {
+    --elc-mnav-top: clamp(52px, 7.4645svh, 63px);
+    --elc-mnav-width: min(342px, calc(100vw - 48px));
+    display: block;
   }
 
-  .elc-method-indicator {
-    --elc-method-dot-active-width: 40px;
-    --elc-method-dot-gap: 7px;
-    --elc-method-dot-size: 7px;
+  .elc-mnav-bar,
+  .elc-mnav-panel {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(217, 217, 217, 0.2);
+    left: 0;
+    margin-inline: auto;
+    position: fixed;
+    right: 0;
+    width: var(--elc-mnav-width);
   }
 
-  .elc-nav.is-card-nav .elc-nav-menu a[href="#method"] {
-    height: 36px;
-    width: 44px;
+  .elc-mnav-bar {
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 100px;
+    display: flex;
+    height: 56px;
+    justify-content: space-between;
+    padding: 0 20px;
+    top: var(--elc-mnav-top);
+    z-index: 31;
   }
 
-  .elc-nav-contact {
-    padding: 0 15px;
+  .elc-mnav-brand {
+    align-items: center;
+    display: inline-flex;
+    height: 44px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .elc-mnav-brand-art {
+    display: block;
+    height: 16px;
+    position: relative;
+    width: 100px;
+  }
+
+  .elc-mnav-brand-art img {
+    height: 16px;
+    inset: 0;
+    max-width: none;
+    position: absolute;
+    width: 100px;
+  }
+
+  .elc-mnav-brand-base {
+    filter: brightness(0);
+  }
+
+  .elc-mnav-brand-accent {
+    clip-path: inset(0 0 0 88.15%);
+  }
+
+  .elc-mnav-toggle {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    flex: 0 0 48px;
+    height: 48px;
+    margin: 0 -12px 0 0;
+    padding: 0;
+    position: relative;
+    touch-action: manipulation;
+    z-index: 32;
+  }
+
+  .elc-mnav-brand:focus-visible,
+  .elc-mnav-toggle:focus-visible,
+  .elc-mnav-link:focus-visible {
+    outline: 2px solid #050505;
+    outline-offset: 3px;
+  }
+
+  .elc-mnav-dot {
+    background: #050505;
+    border-radius: 2px;
+    height: 4px;
+    position: absolute;
+    top: 22px;
+    width: 4px;
+    will-change: transform;
+  }
+
+  .elc-mnav-dot[data-dot="l"] {
+    left: 16px;
+  }
+
+  .elc-mnav-dot[data-dot="m"] {
+    left: 24px;
+  }
+
+  .elc-mnav-dot[data-dot="r"] {
+    left: 32px;
+  }
+
+  .elc-mnav-dot--accent {
+    background: #ac9fa3;
+  }
+
+  .elc-mnav-panel {
+    border-radius: 25px;
+    height: 407px;
+    overflow: hidden;
+    padding: 55px 20px 0 clamp(34px, 15.641vw, 61px);
+    top: calc(var(--elc-mnav-top) + 56px);
+    transform-origin: 50% 0%;
+    visibility: hidden;
+    will-change: clip-path, opacity;
+    z-index: 30;
+  }
+
+  .elc-mnav-label-mask {
+    height: 29px;
+    overflow: hidden;
+  }
+
+  .elc-mnav-label {
+    color: #767676;
+    font-size: 24px;
+    font-weight: 500;
+    height: 29px;
+    letter-spacing: -1.2px;
+    line-height: 29px;
+    margin: 0;
+    will-change: transform, opacity;
+  }
+
+  .elc-mnav-links {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .elc-mnav-link {
+    display: block;
+    font-size: clamp(35px, 10.256vw, 40px);
+    font-weight: 500;
+    height: 53px;
+    letter-spacing: clamp(-2px, -0.5128vw, -1.75px);
+    line-height: 48px;
+    max-width: 100%;
+    white-space: nowrap;
+  }
+
+  .elc-mnav-mask {
+    display: block;
+    height: 48px;
+    overflow: hidden;
+  }
+
+  .elc-mnav-rise {
+    display: block;
+    height: 48px;
+    will-change: transform;
+  }
+
+  .elc-mnav-link .elc-roll {
+    height: 48px;
+  }
+
+  .elc-mnav-link .elc-roll-face {
+    line-height: 48px;
   }
 
   .elc-hero {
@@ -635,6 +764,75 @@ select {
   width: clamp(38px, 2.66vw, 51px);
 }
 
+/* ---- Rolled text hover reel (RollingText) ---------------------------- */
+/* An outer clip, one in-flow face, and an identical duplicate parked just
+   below it. On hover/focus both faces slide up by exactly one face height:
+   the visible copy exits through the top, the duplicate lands in its place.
+   Height/width are driven entirely by the in-flow face, so there is no layout
+   shift and the host link keeps its dimensions. */
+.elc-roll {
+  display: inline-flex;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  vertical-align: bottom;
+}
+
+.elc-roll-face {
+  align-items: center;
+  display: inline-flex;
+  /* Generous enough to keep descenders (p, y, g) clear of the clip edge. */
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.elc-roll-dup {
+  left: 0;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .elc-roll-face {
+    transition: transform 0.52s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  :is(a, button):not(:disabled):hover .elc-roll-face,
+  :is(a, button):not(:disabled):focus-visible .elc-roll-face {
+    transform: translateY(-100%);
+  }
+
+  /* Subtle complementary drift on the pill arrow — never louder than the roll. */
+  .elc-pill-icon {
+    transition: transform 0.52s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  .elc-pill:not(:disabled):hover .elc-pill-icon,
+  .elc-pill:not(:disabled):focus-visible .elc-pill-icon {
+    transform: translateX(3px);
+  }
+}
+
+/* Preserve the 1px seam between "elc.studio" and its © inside the reel. */
+.elc-nav-brand .elc-roll-face {
+  gap: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elc-roll-face,
+  .elc-pill-icon {
+    transition: none;
+  }
+
+  :is(a, button):hover .elc-roll-face,
+  :is(a, button):focus-visible .elc-roll-face,
+  .elc-pill:hover .elc-pill-icon,
+  .elc-pill:focus-visible .elc-pill-icon {
+    transform: none;
+  }
+}
+
 .elc-split-word,
 [data-split-word],
 [data-but-dot],
@@ -686,6 +884,45 @@ select {
 
 .elc-about-media img {
   object-fit: cover;
+}
+
+/* Wireframe placeholder — every non-hero image/video is swapped for a flat
+   grey block, so the page reads like the original wireframe. It fills its
+   host container, which keeps its own size/aspect-ratio. */
+.elc-ph {
+  background: #c9c9c9;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+/* ---- Closing beat: "The question is..." ------------------------------ */
+/* Glued to the end of the paragraph in the accent tone; it flows inline as
+   the natural last words, only its reveal makes it distinct. */
+.elc-about-question {
+  color: var(--elc-accent);
+  white-space: nowrap;
+}
+
+/* Fixed frame for the vertical mask reveal — the words rise into it from
+   below while fading in. clip-path (not overflow) keeps the inline baseline
+   aligned with the surrounding text. */
+.elc-about-question-reveal {
+  clip-path: inset(-0.3em 0px 0px 0px);
+  display: inline-block;
+}
+
+.elc-about-question-words {
+  display: inline-block;
+}
+
+.elc-about-question-dots {
+  display: inline-block;
+}
+
+.elc-about-dot {
+  display: inline-block;
+  transform-origin: 50% 60%;
 }
 
 /* ---- Scenes 2-5 — Journey (intro → media → showcase rail) ------------ */
@@ -1200,17 +1437,15 @@ html.elc-js .elc-takeover {
   width: clamp(9px, 0.68vw, 13px);
 }
 
-/* ---- Scene 11 — Closing ---------------------------------------------- */
+/* ---- Scenes 11-14 — Create (question → yours. portal → editorial → form) */
 
-/* ---- Scenes 11-12 — Connect (closing morphs into the form) ---------- */
-
-.elc-connect {
+.elc-create {
   background: var(--elc-scene-bg);
   position: relative;
   z-index: 1;
 }
 
-.elc-connect-stage {
+.elc-create-stage {
   background: var(--elc-scene-bg);
   display: grid;
   height: 100svh;
@@ -1219,11 +1454,186 @@ html.elc-js .elc-takeover {
   position: relative;
 }
 
-/* Closing line and form share the centered cell so the form grows out of
-   the "Let's connect" slot (FLIP). */
+/* Question/answer heading, closing line and form share the centered cell so
+   every transformation happens in one visual area (FLIP). */
+.elc-create-heading,
 .elc-closing-heading,
 .elc-contact-form-wrap {
   grid-area: 1 / 1;
+}
+
+.elc-create-heading {
+  display: grid;
+  font-weight: 500;
+  margin: 0;
+  place-items: center;
+  text-align: center;
+  z-index: 2;
+}
+
+/* Vertical reveal masks: the sentences rise into view inside these frames. */
+.elc-create-clip {
+  grid-area: 1 / 1;
+  overflow: hidden;
+  padding-block: 0.14em;
+}
+
+.elc-create-line {
+  display: inline-block;
+  font-size: var(--elc-display);
+  letter-spacing: -0.05em; /* exactly -2.6px at the 52px Figma reference */
+  line-height: normal;
+  white-space: nowrap; /* Figma 151:4 / 151:18 — one line at desktop */
+}
+
+.elc-create-answer {
+  align-items: baseline;
+  column-gap: 0.22em;
+  display: inline-flex;
+}
+
+.elc-create-qword,
+.elc-create-word {
+  display: inline-block;
+}
+
+.elc-create-word-inner {
+  display: inline-block;
+  position: relative;
+}
+
+.elc-create-word.is-accent {
+  color: var(--elc-accent);
+}
+
+.elc-yours-text span {
+  display: inline-block;
+}
+
+/* Zero-size inline-block: its box bottom sits exactly on the text baseline,
+   giving measure() the baseline without any font-metric assumptions. */
+.elc-baseline-probe {
+  display: inline-block;
+  height: 0;
+  width: 0;
+}
+
+/* ---- media portal inside the letterforms of "yours." ------------------ */
+
+.elc-yours-portal {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* Geometry (letter ink boxes) and clip-path are set from measured rects. */
+.elc-letter-tile {
+  overflow: hidden;
+  position: absolute;
+}
+
+.elc-letter-tile img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.elc-letter-tile.is-dot {
+  background: var(--elc-accent);
+}
+
+/* ---- editorial composition --------------------------------------------- */
+
+.elc-create-grid {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+}
+
+.elc-create-card {
+  border-radius: var(--elc-radius-media);
+  margin: 0;
+  overflow: hidden;
+  position: absolute;
+}
+
+.elc-create-card img,
+.elc-create-card video {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.elc-create-card.is-hero {
+  height: 46%;
+  left: 27%;
+  top: 25%;
+  width: 46%;
+}
+
+.elc-create-card.is-vertical {
+  height: 46%;
+  left: 76%;
+  top: 13%;
+  width: 14%;
+}
+
+.elc-create-card.is-frame-a {
+  height: 30%;
+  left: 7%;
+  top: 12%;
+  width: 21%;
+}
+
+.elc-create-card.is-frame-b {
+  height: 28%;
+  left: 9%;
+  top: 58%;
+  width: 19%;
+}
+
+.elc-create-card.is-detail-1 {
+  height: 17%;
+  left: 61%;
+  top: 76%;
+  width: 13%;
+}
+
+.elc-create-card.is-detail-2 {
+  height: 15%;
+  left: 79%;
+  top: 66%;
+  width: 11%;
+}
+
+.elc-create-card.is-detail-3 {
+  height: 13%;
+  left: 33%;
+  top: 16%;
+  width: 12%;
+}
+
+/* Accent dot motif: rests dead-center with no CSS transform (GSAP owns the
+   transform channel; every position is a baked tween offset). */
+.elc-create-dot {
+  background: var(--elc-accent);
+  border-radius: 50%;
+  height: clamp(10px, 0.9vw, 18px);
+  inset: 0;
+  margin: auto;
+  position: absolute;
+  width: clamp(10px, 0.9vw, 18px);
+  z-index: 4;
+}
+
+.elc-create .elc-closing-heading {
+  z-index: 2;
+}
+
+/* Above the media cards so the mini form crossfades over the hero vessel. */
+.elc-create .elc-contact-form-wrap {
+  z-index: 5;
 }
 
 .elc-closing-heading {
@@ -1565,10 +1975,58 @@ html.elc-js .elc-takeover {
   .elc-journey-row,
   .elc-dark-line,
   .elc-closing-line,
+  .elc-create-line,
   .elc-pricing-line,
   .elc-process-title,
   .elc-footer-thanks {
     font-size: clamp(1.45rem, 6.6vw, 2rem);
+  }
+
+  /* Deliberate wrap for the question/answer; per-word measuring handles the
+     two-line geometry automatically. */
+  .elc-create-line {
+    white-space: normal;
+  }
+
+  .elc-create-answer {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.04em;
+  }
+
+  /* Mobile keeps 4 media containers. */
+  .elc-create-card.is-frame-b,
+  .elc-create-card.is-detail-2,
+  .elc-create-card.is-detail-3 {
+    display: none;
+  }
+
+  .elc-create-card.is-hero {
+    height: 32%;
+    left: 7%;
+    top: 31%;
+    width: 86%;
+  }
+
+  .elc-create-card.is-vertical {
+    height: 28%;
+    left: 58%;
+    top: 67%;
+    width: 34%;
+  }
+
+  .elc-create-card.is-frame-a {
+    height: 19%;
+    left: 8%;
+    top: 16%;
+    width: 46%;
+  }
+
+  .elc-create-card.is-detail-1 {
+    height: 15%;
+    left: 9%;
+    top: 70%;
+    width: 32%;
   }
 
   /* Deliberate wrap: phrases stay close; the slot drops to its own line so
@@ -1579,6 +2037,10 @@ html.elc-js .elc-takeover {
     justify-content: center;
     row-gap: 0.35em;
     white-space: normal;
+  }
+
+  .elc-closing-line {
+    width: calc(100vw - 32px);
   }
 
   .elc-price-slot,
@@ -1746,7 +2208,7 @@ html.elc-js .elc-takeover {
 /* ---- No-JS & reduced-motion linear fallback --------------------------- */
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-about-stage,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-connect-stage,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-stage,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-stage {
   display: block;
   height: auto;
@@ -1759,6 +2221,7 @@ html.elc-js .elc-takeover {
    natural order without JS. */
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-heading,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing-shell,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-heading,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-closing-heading,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-contact-form-wrap {
   grid-area: auto;
@@ -1781,7 +2244,7 @@ html.elc-js .elc-takeover {
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-dark,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-pricing,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-connect,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create,
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-footer {
   margin-top: 0;
 }
@@ -1933,6 +2396,45 @@ html.elc-js .elc-takeover {
   flex-wrap: wrap;
   justify-content: center;
   white-space: normal;
+}
+
+/* Create scene static fallback: question → answer → media grid → connect →
+   form, in normal reading order with no pinned scenes. */
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-heading {
+  gap: 0.6em;
+  margin-bottom: clamp(28px, 5svh, 60px);
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-clip {
+  grid-area: auto;
+  overflow: visible;
+  padding-block: 0;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-line {
+  white-space: normal;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-yours-portal,
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-dot {
+  display: none;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  inset: auto;
+  margin: clamp(28px, 5svh, 60px) auto;
+  max-width: min(1000px, 92vw);
+  position: static;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-card {
+  aspect-ratio: 16 / 10;
+  height: auto;
+  position: static;
+  width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {

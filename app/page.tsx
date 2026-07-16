@@ -1,9 +1,11 @@
 import AboutScene from "./components/scenes/about-scene";
-import ConnectScene from "./components/scenes/connect-scene";
+import CreateScene from "./components/scenes/create-scene";
 import DarkScene from "./components/scenes/dark-scene";
 import FooterReveal from "./components/scenes/footer-reveal";
 import JourneyScene from "./components/scenes/journey-scene";
 import PricingScene from "./components/scenes/pricing-scene";
+import MobileNav from "./components/mobile-nav";
+import RollingText from "./components/rolling-text";
 import { processSteps, socialExamples, websiteExamples } from "./components/scenes/data";
 
 export default function Home() {
@@ -11,12 +13,20 @@ export default function Home() {
     <main className="elc-site">
       <nav className="elc-nav" aria-label="Main navigation" data-elc-nav>
         <a className="elc-nav-brand" href="#top" aria-label="Back to top">
-          elc.studio<span aria-hidden="true">©</span>
+          <RollingText>
+            elc.studio<span aria-hidden="true" data-brand-copy>©</span>
+          </RollingText>
         </a>
         <div className="elc-nav-menu" aria-label="Page sections">
-          <a href="#about">About</a>
-          <a href="#method">Method</a>
-          <a href="#subscriptions">Subscriptions</a>
+          <a href="#about">
+            <RollingText>About</RollingText>
+          </a>
+          <a href="#method">
+            <RollingText>Method</RollingText>
+          </a>
+          <a href="#subscriptions">
+            <RollingText>Subscriptions</RollingText>
+          </a>
           <div className="elc-method-indicator" aria-hidden="true" data-method-indicator>
             {processSteps.map((step) => (
               <span key={step.title} data-method-dot />
@@ -24,9 +34,11 @@ export default function Home() {
           </div>
         </div>
         <a className="elc-nav-contact" href="#contact">
-          Contact
+          <RollingText>Contact</RollingText>
         </a>
       </nav>
+
+      <MobileNav />
 
       <section id="top" className="elc-hero" aria-labelledby="hero-title" data-hero-section>
         <div className="elc-hero-phone" aria-hidden="true" data-hero-phone>
@@ -47,7 +59,7 @@ export default function Home() {
       <JourneyScene items={socialExamples} variant="social" />
       <DarkScene />
       <PricingScene />
-      <ConnectScene />
+      <CreateScene />
       <FooterReveal />
     </main>
   );
