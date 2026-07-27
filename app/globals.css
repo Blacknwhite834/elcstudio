@@ -110,7 +110,7 @@ select {
 .elc-pricing-price,
 .elc-closing-line,
 .elc-contact-form-wrap,
-.elc-create-word-inner,
+.elc-create-line,
 .elc-create-card,
 [data-hero-phone-inner] {
   will-change: transform, opacity;
@@ -1497,49 +1497,8 @@ html.elc-js .elc-takeover {
   display: inline-block;
 }
 
-.elc-create-word-inner {
-  display: inline-block;
-  position: relative;
-}
-
 .elc-create-word.is-accent {
   color: var(--elc-accent);
-}
-
-.elc-yours-text span {
-  display: inline-block;
-}
-
-/* Zero-size inline-block: its box bottom sits exactly on the text baseline,
-   giving measure() the baseline without any font-metric assumptions. */
-.elc-baseline-probe {
-  display: inline-block;
-  height: 0;
-  width: 0;
-}
-
-/* ---- media portal inside the letterforms of "yours." ------------------ */
-
-.elc-yours-portal {
-  inset: 0;
-  pointer-events: none;
-  position: absolute;
-}
-
-/* Geometry (letter ink boxes) and clip-path are set from measured rects. */
-.elc-letter-tile {
-  overflow: hidden;
-  position: absolute;
-}
-
-.elc-letter-tile img {
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
-}
-
-.elc-letter-tile.is-dot {
-  background: var(--elc-accent);
 }
 
 /* ---- editorial composition --------------------------------------------- */
@@ -1552,7 +1511,7 @@ html.elc-js .elc-takeover {
 }
 
 .elc-create-card {
-  border-radius: var(--elc-radius-media);
+  border-radius: 9px;
   margin: 0;
   overflow: hidden;
   position: absolute;
@@ -1614,17 +1573,28 @@ html.elc-js .elc-takeover {
   width: 12%;
 }
 
-/* Accent dot motif: rests dead-center with no CSS transform (GSAP owns the
-   transform channel; every position is a baked tween offset). */
-.elc-create-dot {
-  background: var(--elc-accent);
-  border-radius: 50%;
-  height: clamp(10px, 0.9vw, 18px);
-  inset: 0;
-  margin: auto;
-  position: absolute;
-  width: clamp(10px, 0.9vw, 18px);
-  z-index: 4;
+/* Lower-left square fills the empty zone under the frames. */
+.elc-create-card.is-square {
+  height: 20%;
+  left: 12%;
+  top: 74%;
+  width: 15%;
+}
+
+/* Center-right motion capsule bridges the hero and the right column. */
+.elc-create-card.is-capsule {
+  height: 14%;
+  left: 74%;
+  top: 44%;
+  width: 17%;
+}
+
+/* Tablet: trim to 7 items so the composition stays legible with less width. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .elc-create-card.is-detail-2,
+  .elc-create-card.is-detail-3 {
+    display: none;
+  }
 }
 
 .elc-create .elc-closing-heading {
@@ -1994,38 +1964,46 @@ html.elc-js .elc-takeover {
     row-gap: 0.04em;
   }
 
-  /* Mobile keeps 4 media containers. */
+  /* Mobile keeps 5 media containers, arranged more compactly. */
   .elc-create-card.is-frame-b,
   .elc-create-card.is-detail-2,
-  .elc-create-card.is-detail-3 {
+  .elc-create-card.is-detail-3,
+  .elc-create-card.is-capsule {
     display: none;
   }
 
   .elc-create-card.is-hero {
     height: 32%;
     left: 7%;
-    top: 31%;
+    top: 33%;
     width: 86%;
   }
 
   .elc-create-card.is-vertical {
-    height: 28%;
-    left: 58%;
-    top: 67%;
-    width: 34%;
+    height: 26%;
+    left: 60%;
+    top: 69%;
+    width: 32%;
   }
 
   .elc-create-card.is-frame-a {
-    height: 19%;
+    height: 18%;
     left: 8%;
-    top: 16%;
-    width: 46%;
+    top: 14%;
+    width: 44%;
   }
 
   .elc-create-card.is-detail-1 {
     height: 15%;
     left: 9%;
-    top: 70%;
+    top: 71%;
+    width: 32%;
+  }
+
+  .elc-create-card.is-square {
+    height: 16%;
+    left: 60%;
+    top: 13%;
     width: 32%;
   }
 
@@ -2413,11 +2391,6 @@ html.elc-js .elc-takeover {
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-line {
   white-space: normal;
-}
-
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-yours-portal,
-:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-dot {
-  display: none;
 }
 
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-grid {

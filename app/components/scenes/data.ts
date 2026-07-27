@@ -195,14 +195,31 @@ export const pricingPlans: PricingPlan[] = [
   },
 ];
 
-export type CreateLetter = "y" | "o" | "u" | "r" | "s";
+// Direction each media item drifts in from before it lands. Deterministic and
+// art-directed — never random — so the composition is identical after refresh
+// and while reverse-scrolling.
+export type CreateEnterDir = "top" | "left" | "right" | "bottom" | "lift";
 
 export type CreateCard = {
-  id: "hero" | "vertical" | "frameA" | "frameB" | "detail1" | "detail2" | "detail3";
-  /** Letter of "yours." the card visually escapes from (undefined = fades in late). */
-  from?: CreateLetter;
-  /** Parallax factor during the climax drift (0 = static, 1 = full drift). */
+  id:
+    | "hero"
+    | "vertical"
+    | "frameA"
+    | "frameB"
+    | "detail1"
+    | "detail2"
+    | "detail3"
+    | "square"
+    | "capsule";
+  /** Landing sequence index — lower lands first (the staggered rhythm). */
+  order: number;
+  /** Parallax factor: gentle drift during the hold, pull during compression. */
   depth: number;
+  /** Where the item lifts in from, how far (px at the 1920 reference), and its
+   *  restrained start rotation. Distance is scaled to the viewport at measure. */
+  enter: { dir: CreateEnterDir; dist: number; rotate: number };
+  /** Final restrained resting rotation, in degrees. */
+  rest: number;
   src?: string;
   posterSrc?: string;
   videoMp4Src?: string;
@@ -210,62 +227,95 @@ export type CreateCard = {
   objectPosition?: string;
 };
 
-// The media revealed inside the letterforms of "yours." — each tile shows the
-// exact same asset (or poster) as the card it later escapes into, so the
-// letter→card layer swap reads as one continuous object.
-export const createLetterMedia: Record<CreateLetter, { src: string; objectPosition?: string }> = {
-  y: { src: "/images/68022ab71504ac81d459a6bf_thumb__ascent-p-800.webp", objectPosition: "50% 12%" },
-  o: {
-    src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary-p-800.webp",
-    objectPosition: "50% 18%",
-  },
-  u: { src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent-p-1600.webp", objectPosition: "50% 40%" },
-  r: { src: "/videos/posters/cardstacked3.webp", objectPosition: "50% 30%" },
-  s: { src: "/videos/posters/card4.webp", objectPosition: "50% 50%" },
-};
-
-// Editorial composition after the media escapes "yours." — one landscape hero,
-// one vertical social video, two interface frames, three small details.
+// A curated moodboard of nine on-brand media items. Their final positions and
+// sizes live in CSS (.elc-create-card.is-*); each card here only declares how
+// it lands. The `order` follows the brief's rhythm: a small upper-left item,
+// then a medium lower-right, a portrait from the side, a medium from the
+// opposite direction, the central hero, then the supporting details.
 export const createCards: CreateCard[] = [
   {
-    id: "hero",
-    from: "u",
-    depth: 0.3,
-    src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent-p-1600.webp",
-    objectPosition: "50% 40%",
+    id: "frameA", // upper-left, lands first
+    order: 0,
+    depth: 0.55,
+    enter: { dir: "left", dist: 260, rotate: -5 },
+    rest: -1.5,
+    src: "/images/68022ab71504ac81d459a6bf_thumb__ascent-p-800.webp",
+    objectPosition: "50% 12%",
   },
   {
-    id: "vertical",
-    from: "r",
+    id: "detail1", // lower-right, small motion clip
+    order: 1,
+    depth: 0.9,
+    enter: { dir: "bottom", dist: 240, rotate: 5 },
+    rest: 2,
+    posterSrc: "/videos/posters/card4.webp",
+    videoMp4Src: "/videos/card4.mp4",
+    videoWebmSrc: "/videos/card4.webm",
+  },
+  {
+    id: "vertical", // upper-right portrait, from the side
+    order: 2,
     depth: 0.8,
+    enter: { dir: "right", dist: 300, rotate: 4 },
+    rest: 1.5,
     posterSrc: "/videos/posters/cardstacked3.webp",
     videoMp4Src: "/videos/cardstacked3.mp4",
     videoWebmSrc: "/videos/cardstacked3.webm",
   },
   {
-    id: "frameA",
-    from: "y",
-    depth: 0.55,
-    src: "/images/68022ab71504ac81d459a6bf_thumb__ascent-p-800.webp",
-    objectPosition: "50% 12%",
-  },
-  {
-    id: "frameB",
-    from: "o",
+    id: "frameB", // center-left, from the opposite direction
+    order: 3,
     depth: 0.6,
+    enter: { dir: "left", dist: 240, rotate: -4 },
+    rest: -1.5,
     src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary-p-800.webp",
     objectPosition: "50% 18%",
   },
   {
-    id: "detail1",
-    from: "s",
-    depth: 0.9,
-    posterSrc: "/videos/posters/card4.webp",
-    videoMp4Src: "/videos/card4.mp4",
-    videoWebmSrc: "/videos/card4.webm",
+    id: "hero", // central hero, lifts up into place
+    order: 4,
+    depth: 0.3,
+    enter: { dir: "lift", dist: 90, rotate: 0 },
+    rest: 0,
+    src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent-p-1600.webp",
+    objectPosition: "50% 40%",
   },
-  { id: "detail2", depth: 1, src: "/images/Lightbox-Sign-Mockup-p-800.png" },
-  { id: "detail3", depth: 0.75, src: "/images/photo-34_1-p-1080.webp" },
+  {
+    id: "square", // lower-left photo, fills the empty zone
+    order: 5,
+    depth: 0.85,
+    enter: { dir: "bottom", dist: 220, rotate: -6 },
+    rest: -2,
+    src: "/images/photo-33_1-p-1080.webp",
+    objectPosition: "50% 45%",
+  },
+  {
+    id: "capsule", // center-right motion capsule
+    order: 6,
+    depth: 0.95,
+    enter: { dir: "right", dist: 200, rotate: 6 },
+    rest: 2.5,
+    posterSrc: "/videos/posters/card1.webp",
+    videoMp4Src: "/videos/card1.mp4",
+    videoWebmSrc: "/videos/card1.webm",
+  },
+  {
+    id: "detail2", // upper-right supporting detail
+    order: 7,
+    depth: 1,
+    enter: { dir: "top", dist: 200, rotate: 4 },
+    rest: 2,
+    src: "/images/Lightbox-Sign-Mockup-p-800.png",
+  },
+  {
+    id: "detail3", // upper-center supporting detail
+    order: 8,
+    depth: 0.75,
+    enter: { dir: "top", dist: 220, rotate: -3 },
+    rest: -1.5,
+    src: "/images/photo-34_1-p-1080.webp",
+    objectPosition: "50% 40%",
+  },
 ];
 
 export const footerPageLinks = [
