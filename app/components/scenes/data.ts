@@ -195,31 +195,96 @@ export const pricingPlans: PricingPlan[] = [
   },
 ];
 
-// Direction each media item drifts in from before it lands. Deterministic and
-// art-directed — never random — so the composition is identical after refresh
-// and while reverse-scrolling.
-export type CreateEnterDir = "top" | "left" | "right" | "bottom" | "lift";
+/* ---- Drifting gallery (create scene) ------------------------------------ */
+
+// The headline is an immovable typographic island at the exact centre of the
+// stage; the work streams past it. Every item enters beyond the RIGHT edge,
+// drifts continuously leftward, bends through a wide upper or lower Bezier
+// arch around the protected central text, and exits beyond the LEFT edge.
+// There is no circular orbit and no card ever reverses horizontally.
+export type DriftPathId = "uHigh" | "uMid" | "uLow" | "lLow" | "lMid" | "lDeep";
+
+// Purely a stacking order for natural overlap — NOT a depth system. Size and
+// timing carry the richness; nothing is dimmed or shrunk to fake distance.
+export type DriftLayer = "back" | "mid" | "front";
+
+/** Anchors in normalised stage units: u × halfStageW, v × halfStageH, where
+ *  u = +1 is the right edge and v = +1 the bottom. Authored right-to-left, so
+ *  u decreases monotonically down each list and the horizontal drift can never
+ *  double back. Six anchors keeps the sag between neighbours negligible.
+ *
+ *  The upper family is a wide inverted-U: it comes in near mid-height, climbs
+ *  to its crest just right of centre, then eases back down toward mid-height
+ *  as it leaves. The lower family is the same shape flipped. */
+export const driftPaths: Record<DriftPathId, Array<[number, number]>> = {
+  uHigh: [
+    [1.3, -0.04],
+    [0.78, -0.48],
+    [0.26, -0.78],
+    [-0.26, -0.72],
+    [-0.78, -0.42],
+    [-1.36, -0.06],
+  ],
+  uMid: [
+    [1.3, -0.14],
+    [0.78, -0.44],
+    [0.26, -0.6],
+    [-0.26, -0.56],
+    [-0.78, -0.34],
+    [-1.36, -0.02],
+  ],
+  uLow: [
+    [1.3, -0.02],
+    [0.78, -0.26],
+    [0.26, -0.42],
+    [-0.26, -0.4],
+    [-0.78, -0.26],
+    [-1.36, -0.04],
+  ],
+  lLow: [
+    [1.3, 0.04],
+    [0.78, 0.28],
+    [0.26, 0.42],
+    [-0.26, 0.4],
+    [-0.78, 0.26],
+    [-1.36, 0.02],
+  ],
+  lMid: [
+    [1.3, 0.12],
+    [0.78, 0.44],
+    [0.26, 0.62],
+    [-0.26, 0.58],
+    [-0.78, 0.34],
+    [-1.36, 0.04],
+  ],
+  lDeep: [
+    [1.3, 0.02],
+    [0.78, 0.46],
+    [0.26, 0.76],
+    [-0.26, 0.7],
+    [-0.78, 0.4],
+    [-1.36, 0.06],
+  ],
+};
 
 export type CreateCard = {
-  id:
-    | "hero"
-    | "vertical"
-    | "frameA"
-    | "frameB"
-    | "detail1"
-    | "detail2"
-    | "detail3"
-    | "square"
-    | "capsule";
-  /** Landing sequence index — lower lands first (the staggered rhythm). */
-  order: number;
-  /** Parallax factor: gentle drift during the hold, pull during compression. */
-  depth: number;
-  /** Where the item lifts in from, how far (px at the 1920 reference), and its
-   *  restrained start rotation. Distance is scaled to the viewport at measure. */
-  enter: { dir: CreateEnterDir; dist: number; rotate: number };
-  /** Final restrained resting rotation, in degrees. */
-  rest: number;
+  id: string;
+  /** Which curated arc this item rides. Deterministic, never random. */
+  path: DriftPathId;
+  /** Stacking order only. */
+  layer: DriftLayer;
+  /** Desktop schedule, in master-timeline units: entry time and travel span.
+   *  Spans stay close together so every item drifts at a comparable speed —
+   *  the rhythm comes from the stagger, not from varying velocity. */
+  at: number;
+  dur: number;
+  /** Mobile schedule. Omitted = the item is not part of the mobile set. */
+  atM?: number;
+  durM?: number;
+  /** Fixed base tilt in degrees, kept within ±2. Most items sit upright. */
+  tilt: number;
+  /** Axis of the small internal crop drift while the container travels. */
+  crop: "x" | "y";
   src?: string;
   posterSrc?: string;
   videoMp4Src?: string;
@@ -227,96 +292,148 @@ export type CreateCard = {
   objectPosition?: string;
 };
 
-// A curated moodboard of nine on-brand media items. Their final positions and
-// sizes live in CSS (.elc-create-card.is-*); each card here only declares how
-// it lands. The `order` follows the brief's rhythm: a small upper-left item,
-// then a medium lower-right, a portrait from the side, a medium from the
-// opposite direction, the central hero, then the supporting details.
+// Ten stream items from the studio's own visual universe — the Ascent site
+// work, the client space and social clips, the branding mockups. Every one of
+// them crosses and leaves; nothing is held back to close the scene, because
+// the hand-off is carried by the closing line, not by a final image.
+//
+// Upper and lower arcs alternate straight down the list, and the mobile subset
+// (the items carrying atM) alternates too, so the narrower mobile arcs never
+// stack two pieces on the same side of the text. Larger items ride the
+// shallower arcs; the small fragments take the extremes.
 export const createCards: CreateCard[] = [
   {
-    id: "frameA", // upper-left, lands first
-    order: 0,
-    depth: 0.55,
-    enter: { dir: "left", dist: 260, rotate: -5 },
-    rest: -1.5,
-    src: "/images/68022ab71504ac81d459a6bf_thumb__ascent-p-800.webp",
-    objectPosition: "50% 12%",
+    id: "site", // the flagship website
+    path: "uMid",
+    layer: "back",
+    at: 9,
+    dur: 11,
+    atM: 5.6,
+    durM: 6.8,
+    tilt: -1,
+    crop: "x",
+    src: "/images/68022ab71504ac81d459a6bf_thumb__ascent.webp",
+    objectPosition: "50% 22%",
   },
   {
-    id: "detail1", // lower-right, small motion clip
-    order: 1,
-    depth: 0.9,
-    enter: { dir: "bottom", dist: 240, rotate: 5 },
-    rest: 2,
-    posterSrc: "/videos/posters/card4.webp",
-    videoMp4Src: "/videos/card4.mp4",
-    videoWebmSrc: "/videos/card4.webm",
+    id: "social", // social presence
+    path: "lMid",
+    layer: "mid",
+    at: 10.5,
+    dur: 11,
+    atM: 7.1,
+    durM: 6.8,
+    tilt: 1.5,
+    crop: "x",
+    posterSrc: "/videos/posters/card6.webp",
+    videoMp4Src: "/videos/card6.mp4",
+    videoWebmSrc: "/videos/card6.webm",
   },
   {
-    id: "vertical", // upper-right portrait, from the side
-    order: 2,
-    depth: 0.8,
-    enter: { dir: "right", dist: 300, rotate: 4 },
-    rest: 1.5,
-    posterSrc: "/videos/posters/cardstacked3.webp",
-    videoMp4Src: "/videos/cardstacked3.mp4",
-    videoWebmSrc: "/videos/cardstacked3.webm",
+    id: "space", // client space — portrait
+    path: "uHigh",
+    layer: "front",
+    at: 12,
+    dur: 10.5,
+    atM: 8.6,
+    durM: 6.5,
+    tilt: 0,
+    crop: "y",
+    posterSrc: "/videos/posters/card2.webp",
+    videoMp4Src: "/videos/card2.mp4",
+    videoWebmSrc: "/videos/card2.webm",
   },
   {
-    id: "frameB", // center-left, from the opposite direction
-    order: 3,
-    depth: 0.6,
-    enter: { dir: "left", dist: 240, rotate: -4 },
-    rest: -1.5,
-    src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary-p-800.webp",
-    objectPosition: "50% 18%",
+    id: "booking", // the reservation page
+    path: "lLow",
+    layer: "back",
+    at: 13.5,
+    dur: 11.5,
+    atM: 10.1,
+    durM: 7.1,
+    tilt: 1,
+    crop: "x",
+    src: "/images/6804d4f08d47b543c1ad87da_thumb__ascent--secondary-p-1080.webp",
+    objectPosition: "50% 30%",
   },
   {
-    id: "hero", // central hero, lifts up into place
-    order: 4,
-    depth: 0.3,
-    enter: { dir: "lift", dist: 90, rotate: 0 },
-    rest: 0,
-    src: "/images/680231e4b0be9f8cb4abbb90_bg__ascent-p-1600.webp",
-    objectPosition: "50% 40%",
-  },
-  {
-    id: "square", // lower-left photo, fills the empty zone
-    order: 5,
-    depth: 0.85,
-    enter: { dir: "bottom", dist: 220, rotate: -6 },
-    rest: -2,
-    src: "/images/photo-33_1-p-1080.webp",
-    objectPosition: "50% 45%",
-  },
-  {
-    id: "capsule", // center-right motion capsule
-    order: 6,
-    depth: 0.95,
-    enter: { dir: "right", dist: 200, rotate: 6 },
-    rest: 2.5,
+    id: "ui", // an interface detail, in motion
+    path: "uHigh",
+    layer: "front",
+    at: 15,
+    dur: 10.5,
+    tilt: -1.5,
+    crop: "x",
     posterSrc: "/videos/posters/card1.webp",
     videoMp4Src: "/videos/card1.mp4",
     videoWebmSrc: "/videos/card1.webm",
   },
   {
-    id: "detail2", // upper-right supporting detail
-    order: 7,
-    depth: 1,
-    enter: { dir: "top", dist: 200, rotate: 4 },
-    rest: 2,
+    id: "brand", // signage — the brand out in the world
+    path: "lDeep",
+    layer: "mid",
+    at: 16.5,
+    dur: 11,
+    tilt: 2,
+    crop: "x",
     src: "/images/Lightbox-Sign-Mockup-p-800.png",
+    objectPosition: "50% 44%",
   },
   {
-    id: "detail3", // upper-center supporting detail
-    order: 8,
-    depth: 0.75,
-    enter: { dir: "top", dist: 220, rotate: -3 },
-    rest: -1.5,
-    src: "/images/photo-34_1-p-1080.webp",
-    objectPosition: "50% 40%",
+    id: "launch", // a launched campaign
+    path: "uLow",
+    layer: "back",
+    at: 18,
+    dur: 11.5,
+    tilt: 0,
+    crop: "x",
+    src: "/images/unlock-2-p-800.jpg",
+    objectPosition: "50% 50%",
+  },
+  {
+    id: "type", // typography and process
+    path: "lLow",
+    layer: "front",
+    at: 19.5,
+    dur: 10.5,
+    atM: 11.6,
+    durM: 6.5,
+    tilt: -2,
+    crop: "x",
+    posterSrc: "/videos/posters/card5.webp",
+    videoMp4Src: "/videos/card5.mp4",
+    videoWebmSrc: "/videos/card5.webm",
+  },
+  {
+    id: "process", // structure and wireframe work
+    path: "uMid",
+    layer: "mid",
+    at: 21,
+    dur: 11,
+    tilt: 1,
+    crop: "x",
+    posterSrc: "/videos/posters/card3.webp",
+    videoMp4Src: "/videos/card3.mp4",
+    videoWebmSrc: "/videos/card3.webm",
+  },
+  {
+    id: "mobile", // the work in the hand — portrait
+    path: "lDeep",
+    layer: "front",
+    at: 22.5,
+    dur: 11,
+    atM: 13.1,
+    durM: 6.8,
+    tilt: 0,
+    crop: "y",
+    src: "/images/elc-phone-hand.png",
+    objectPosition: "50% 46%",
   },
 ];
+
+/** Timeline unit at which the last stream item has fully left the stage — the
+ *  clean centred-headline beat the closing line then grows out of. */
+export const STREAM_END = 33.5;
 
 export const footerPageLinks = [
   { label: "About", href: "#about" },

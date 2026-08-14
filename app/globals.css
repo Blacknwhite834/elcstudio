@@ -1501,7 +1501,7 @@ html.elc-js .elc-takeover {
   color: var(--elc-accent);
 }
 
-/* ---- editorial composition --------------------------------------------- */
+/* ---- orbital gallery ---------------------------------------------------- */
 
 .elc-create-grid {
   inset: 0;
@@ -1510,10 +1510,44 @@ html.elc-js .elc-takeover {
   z-index: 3;
 }
 
+/* Every item is anchored to the exact centre of the stage. Its whole journey
+   is transforms — GSAP drives x/y along a curved path, xPercent/yPercent hold
+   the -50/-50 centring, so the two never fight. Size comes from width plus an
+   aspect-ratio; nothing here is animated. */
 .elc-create-card {
-  border-radius: 9px;
+  /* A real surface, so a light-backed screenshot still reads as a container
+     travelling rather than a shape dissolving into the scene. Static — the
+     shadow is never animated, only transforms and opacity are. */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow:
+    0 1px 2px rgba(5, 5, 5, 0.04),
+    0 14px 36px rgba(5, 5, 5, 0.07);
+  left: 50%;
   margin: 0;
   overflow: hidden;
+  position: absolute;
+  top: 50%;
+}
+
+/* Stacking order only — no dimming, no shrinking. The larger pieces pass
+   behind the smaller ones so the overlaps read naturally as the stream drifts. */
+.elc-create-card[data-layer="front"] {
+  z-index: 3;
+}
+
+.elc-create-card[data-layer="mid"] {
+  z-index: 2;
+}
+
+.elc-create-card[data-layer="back"] {
+  z-index: 1;
+}
+
+/* Holds the picture so it can drift a little inside its travelling frame. */
+.elc-create-card-media {
+  display: block;
+  inset: 0;
   position: absolute;
 }
 
@@ -1524,86 +1558,102 @@ html.elc-js .elc-takeover {
   width: 100%;
 }
 
-.elc-create-card.is-hero {
-  height: 46%;
-  left: 27%;
-  top: 25%;
-  width: 46%;
+/* One container in the stream carries the accent — a single hairline, nothing
+   more; the rest of the pink in this scene is "yours." and "Let's connect". */
+.elc-create-card.is-space::after {
+  border: 1px solid var(--elc-accent);
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
 }
 
-.elc-create-card.is-vertical {
-  height: 46%;
-  left: 76%;
-  top: 13%;
-  width: 14%;
+.elc-create-card.is-site {
+  aspect-ratio: 3 / 2;
+  width: 27%;
 }
 
-.elc-create-card.is-frame-a {
-  height: 30%;
-  left: 7%;
-  top: 12%;
-  width: 21%;
+.elc-create-card.is-booking {
+  aspect-ratio: 3 / 2;
+  width: 24%;
 }
 
-.elc-create-card.is-frame-b {
-  height: 28%;
-  left: 9%;
-  top: 58%;
+.elc-create-card.is-launch {
+  aspect-ratio: 16 / 9;
+  width: 22%;
+}
+
+.elc-create-card.is-social {
+  aspect-ratio: 16 / 9;
   width: 19%;
 }
 
-.elc-create-card.is-detail-1 {
-  height: 17%;
-  left: 61%;
-  top: 76%;
-  width: 13%;
+.elc-create-card.is-brand {
+  aspect-ratio: 4 / 3;
+  width: 16%;
 }
 
-.elc-create-card.is-detail-2 {
-  height: 15%;
-  left: 79%;
-  top: 66%;
-  width: 11%;
-}
-
-.elc-create-card.is-detail-3 {
-  height: 13%;
-  left: 33%;
-  top: 16%;
-  width: 12%;
-}
-
-/* Lower-left square fills the empty zone under the frames. */
-.elc-create-card.is-square {
-  height: 20%;
-  left: 12%;
-  top: 74%;
+.elc-create-card.is-process {
+  aspect-ratio: 4 / 3;
   width: 15%;
 }
 
-/* Center-right motion capsule bridges the hero and the right column. */
-.elc-create-card.is-capsule {
-  height: 14%;
-  left: 74%;
-  top: 44%;
-  width: 17%;
+.elc-create-card.is-type {
+  aspect-ratio: 16 / 9;
+  width: 15%;
 }
 
-/* Tablet: trim to 7 items so the composition stays legible with less width. */
+.elc-create-card.is-ui {
+  aspect-ratio: 4 / 3;
+  width: 14%;
+}
+
+.elc-create-card.is-mobile {
+  aspect-ratio: 4 / 5;
+  width: 13%;
+}
+
+.elc-create-card.is-space {
+  aspect-ratio: 4 / 5;
+  width: 12%;
+}
+
+
+/* Tablet: a little larger relative to the narrower stage, so the arcs still
+   read as travel rather than specks crossing a wide field. */
 @media (min-width: 768px) and (max-width: 1199px) {
-  .elc-create-card.is-detail-2,
-  .elc-create-card.is-detail-3 {
-    display: none;
+  .elc-create-card.is-site {
+    width: 33%;
   }
+
+  .elc-create-card.is-booking {
+    width: 29%;
+  }
+
+  .elc-create-card.is-launch {
+    width: 27%;
+  }
+
+  .elc-create-card.is-social {
+    width: 23%;
+  }
+
 }
 
 .elc-create .elc-closing-heading {
-  z-index: 2;
+  z-index: 5;
 }
 
-/* Above the media cards so the mini form crossfades over the hero vessel. */
+/* The headline outranks every media layer: even if an arc were mistuned, a
+   card passes behind the sentence — it can never sit on top of it. */
+.elc-create .elc-create-heading {
+  z-index: 6;
+}
+
+/* Above both, so the real form takes over the converging container's footprint. */
 .elc-create .elc-contact-form-wrap {
-  z-index: 5;
+  z-index: 7;
 }
 
 .elc-closing-heading {
@@ -1964,47 +2014,37 @@ html.elc-js .elc-takeover {
     row-gap: 0.04em;
   }
 
-  /* Mobile keeps 5 media containers, arranged more compactly. */
-  .elc-create-card.is-frame-b,
-  .elc-create-card.is-detail-2,
-  .elc-create-card.is-detail-3,
-  .elc-create-card.is-capsule {
+  /* Mobile keeps 5 containers on narrower arcs. The hidden ones declare no
+     mobile schedule in data.ts, so they never get a trajectory either. */
+  .elc-create-card.is-ui,
+  .elc-create-card.is-brand,
+  .elc-create-card.is-launch,
+  .elc-create-card.is-process {
     display: none;
   }
 
-  .elc-create-card.is-hero {
-    height: 32%;
-    left: 7%;
-    top: 33%;
-    width: 86%;
+  .elc-create-card.is-site {
+    width: 54%;
   }
 
-  .elc-create-card.is-vertical {
-    height: 26%;
-    left: 60%;
-    top: 69%;
-    width: 32%;
+  .elc-create-card.is-booking {
+    width: 46%;
   }
 
-  .elc-create-card.is-frame-a {
-    height: 18%;
-    left: 8%;
-    top: 14%;
+  .elc-create-card.is-social {
     width: 44%;
   }
 
-  .elc-create-card.is-detail-1 {
-    height: 15%;
-    left: 9%;
-    top: 71%;
-    width: 32%;
+  .elc-create-card.is-type {
+    width: 36%;
   }
 
-  .elc-create-card.is-square {
-    height: 16%;
-    left: 60%;
-    top: 13%;
-    width: 32%;
+  .elc-create-card.is-space {
+    width: 26%;
+  }
+
+  .elc-create-card.is-mobile {
+    width: 28%;
   }
 
   /* Deliberate wrap: phrases stay close; the slot drops to its own line so
@@ -2403,11 +2443,24 @@ html.elc-js .elc-takeover {
   position: static;
 }
 
+/* Cards are centre-anchored and transform-driven for the orbit, so the static
+   fallback has to hand them back to normal flow. All ten stay — reduced motion
+   loses the journey, never the work. */
 :is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-card {
   aspect-ratio: 16 / 10;
+  display: block;
   height: auto;
-  position: static;
+  left: auto;
+  /* relative, not static: the media wrapper is absolutely positioned inside. */
+  position: relative;
+  top: auto;
+  transform: none;
   width: 100%;
+  will-change: auto;
+}
+
+:is(html:not(.elc-js), html.elc-reduced-motion) .elc-create-card-media {
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
